@@ -320,7 +320,21 @@
   text-align: center;
   color: var(--text-secondary);
   font-size: 0.8rem;
+  line-height: 1.8;
   border-top: 1px solid var(--border);
+}
+
+.site-footer p + p {
+  margin-top: var(--space-xs);
+}
+
+.site-footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
 }
 
 /* ============================================
