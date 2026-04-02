@@ -1,0 +1,42 @@
+export const RARITIES = [
+  {
+    id: "common",
+    name: "Common",
+    probability: 0.6,
+    stars: 1,
+    statFloor: 5,
+    color: "#b0b0b0",
+  },
+  {
+    id: "uncommon",
+    name: "Uncommon",
+    probability: 0.25,
+    stars: 2,
+    statFloor: 15,
+    color: "#4ade80",
+  },
+  {
+    id: "rare",
+    name: "Rare",
+    probability: 0.1,
+    stars: 3,
+    statFloor: 25,
+    color: "#60a5fa",
+  },
+  {
+    id: "epic",
+    name: "Epic",
+    probability: 0.04,
+    stars: 4,
+    statFloor: 35,
+    color: "#c084fc",
+  },
+  {
+    id: "legendary",
+    name: "Legendary",
+    probability: 0.01,
+    stars: 5,
+    statFloor: 50,
+    color: "#fbbf24",
+  },
+];
