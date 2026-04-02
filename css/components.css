@@ -1,0 +1,352 @@
+/* ============================================
+   Site Header
+   ============================================ */
+
+.site-header {
+  padding: var(--space-2xl) 0 var(--space-lg);
+  text-align: center;
+}
+
+.site-header h1 {
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.site-header .subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-top: var(--space-xs);
+}
+
+/* ============================================
+   Mechanics Grid
+   ============================================ */
+
+.mechanics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--grid-gap);
+}
+
+.mechanic-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: var(--space-lg);
+}
+
+.mechanic-card h3 {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--accent);
+  margin-bottom: var(--space-sm);
+}
+
+.mechanic-card p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ============================================
+   Species Grid
+   ============================================ */
+
+.species-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--grid-gap);
+}
+
+.species-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: var(--space-md);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+  text-align: center;
+}
+
+.species-card:hover {
+  transform: translateY(-4px);
+  background: var(--bg-card-hover);
+}
+
+.species-card .ascii-art {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  line-height: 1.2;
+  white-space: pre;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.species-card .species-name {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: var(--space-xs);
+}
+
+/* ============================================
+   Rarity Badge
+   ============================================ */
+
+.rarity-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15em 0.5em;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.rarity-badge[data-rarity="common"] {
+  color: var(--rarity-common);
+  border: 1px solid var(--rarity-common);
+}
+.rarity-badge[data-rarity="uncommon"] {
+  color: var(--rarity-uncommon);
+  border: 1px solid var(--rarity-uncommon);
+}
+.rarity-badge[data-rarity="rare"] {
+  color: var(--rarity-rare);
+  border: 1px solid var(--rarity-rare);
+}
+.rarity-badge[data-rarity="epic"] {
+  color: var(--rarity-epic);
+  border: 1px solid var(--rarity-epic);
+}
+.rarity-badge[data-rarity="legendary"] {
+  color: var(--rarity-legendary);
+  border: 1px solid var(--rarity-legendary);
+}
+
+/* ============================================
+   Rarity Filter
+   ============================================ */
+
+.rarity-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.rarity-filter button {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.rarity-filter button:hover {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.rarity-filter button.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(218, 119, 86, 0.1);
+}
+
+/* ============================================
+   Detail Overlay
+   ============================================ */
+
+.detail-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.detail-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.detail-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  max-width: 720px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  position: relative;
+}
+
+.detail-panel .detail-preview {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  line-height: 1.15;
+  white-space: pre;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-panel .detail-info h2 {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: var(--accent);
+  margin-bottom: var(--space-sm);
+}
+
+.detail-panel .detail-info p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.detail-panel .detail-info .stats {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.detail-close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.detail-close:hover {
+  color: var(--text-primary);
+}
+
+/* ============================================
+   Hatch Overlay
+   ============================================ */
+
+.hatch-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: var(--bg-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.hatch-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hatch-overlay .hatch-ascii {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.2;
+  white-space: pre;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.hatch-overlay .hatch-message {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--accent);
+  margin-top: var(--space-xl);
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+
+.site-footer {
+  padding: var(--space-xl) 0;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================
+   Shiny Text Effect
+   ============================================ */
+
+.shiny-text {
+  background: linear-gradient(
+    135deg,
+    #ff6b6b,
+    #feca57,
+    #48dbfb,
+    #ff9ff3,
+    #54a0ff
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shiny-shimmer 3s ease infinite;
+}
+
+@keyframes shiny-shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 600px) {
+  .site-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .detail-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .species-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+}
