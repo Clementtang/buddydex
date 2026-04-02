@@ -24,10 +24,8 @@ A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet compan
 
 ## Data Sources
 
-Buddy species data (ASCII art, rarity tiers, accessories) was sourced from community research of the Claude Code buddy system, including:
-
-- Community-maintained sprite references
-- Claude Buddy system documentation compiled by users
+- **Species names, rarity tiers, and accessory system**: Based on publicly available community documentation of the Claude Code buddy feature
+- **ASCII art**: Original designs created for this project, inspired by species descriptions. Not copied from Anthropic's source code
 
 ## Disclaimer
 
@@ -35,7 +33,7 @@ This is an **unofficial fan project**. It is not affiliated with, endorsed by, o
 
 "Claude", "Claude Code", and "Claude Buddy" are trademarks or product names of Anthropic, PBC. All rights to those names and the underlying buddy system belong to Anthropic.
 
-The ASCII art representations in this project are based on community-sourced references of the Claude Buddy system. If Anthropic believes any content in this project infringes on their intellectual property, please open an issue and it will be promptly addressed.
+If Anthropic believes any content in this project infringes on their intellectual property, please open an issue and it will be promptly addressed.
 
 ## License
 
