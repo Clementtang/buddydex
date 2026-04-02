@@ -1,6 +1,6 @@
 # BuddyDex
 
-A fan-made encyclopedia of [Claude Buddy](https://docs.anthropic.com/en/docs/claude-code/buddy) species — the virtual ASCII pet companions in [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview).
+A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet companions in Claude Code.
 
 **Live site:** [buddydex.vercel.app](https://buddydex.vercel.app) (or your deployed URL)
 
@@ -21,18 +21,6 @@ A fan-made encyclopedia of [Claude Buddy](https://docs.anthropic.com/en/docs/cla
 - ES modules
 - CSS custom properties for theming
 - Deployed on Vercel
-
-## Development
-
-```bash
-# Serve locally
-npx serve .
-
-# Or any static file server
-python3 -m http.server 8090
-```
-
-Open `http://localhost:8090` (or your chosen port).
 
 ## Data Sources
 
