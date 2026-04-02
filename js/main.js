@@ -1,6 +1,6 @@
 import { runHatchAnimation } from "./hatch-animation.js";
 import { renderMechanics } from "./render-mechanics.js";
-import { renderSpeciesGrid, renderRarityFilter } from "./render-grid.js";
+import { renderSpeciesGrid } from "./render-grid.js";
 import { setupDetailOverlay, openDetail } from "./render-detail.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -11,14 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const mechanicsGrid = document.getElementById("mechanics-grid");
   renderMechanics(mechanicsGrid);
 
-  // Species grid + filter
+  // Species grid
   const speciesGrid = document.getElementById("species-grid");
-  const rarityFilter = document.getElementById("rarity-filter");
-
   renderSpeciesGrid(speciesGrid);
-  renderRarityFilter(rarityFilter, (rarity) => {
-    renderSpeciesGrid(speciesGrid, rarity);
-  });
 
   // Detail overlay
   const detailRefs = setupDetailOverlay();
