@@ -1,26 +1,26 @@
 import { RARITIES } from "../data/rarity.js";
 import { EYES, HATS } from "../data/accessories.js";
+import { t } from "./i18n.js";
 
 export function renderMechanics(container) {
+  const rarityList = RARITIES.map(
+    (r) => `${t(`rarity.${r.id}`)} (${r.probability * 100}%)`,
+  ).join(", ");
+
   const cards = [
     {
-      title: "Rarity",
-      body:
-        `Every buddy has a rarity tier that affects its stats and accessories. ` +
-        RARITIES.map((r) => `${r.name} (${r.probability * 100}%)`).join(", ") +
-        ".",
+      title: t("mechanics.rarity.title"),
+      body: t("mechanics.rarity.description").replace("{rarities}", rarityList),
     },
     {
-      title: "Shiny",
-      body:
-        "Any buddy has an independent 1% chance of being shiny. " +
-        "Shiny buddies get a rainbow shimmer effect on their ASCII art.",
+      title: t("mechanics.shiny.title"),
+      body: t("mechanics.shiny.description"),
     },
     {
-      title: "Accessories",
-      body:
-        `${EYES.length} eye styles and ${HATS.length - 1} hats to customize your buddy. ` +
-        "Higher rarity unlocks more hat options.",
+      title: t("mechanics.accessories.title"),
+      body: t("mechanics.accessories.description")
+        .replace("{eyeCount}", EYES.length)
+        .replace("{hatCount}", HATS.length - 1),
     },
   ];
 

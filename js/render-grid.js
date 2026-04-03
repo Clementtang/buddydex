@@ -1,4 +1,5 @@
 import { SPECIES } from "../data/species.js";
+import { t } from "./i18n.js";
 
 const DEFAULT_EYE = "\u00b7";
 
@@ -12,7 +13,7 @@ export function renderSpeciesGrid(container) {
     (sp) => `
     <div class="species-card" data-species-id="${sp.id}">
       <div class="ascii-art">${renderAsciiFrame(sp)}</div>
-      <div class="species-name">${sp.name}</div>
+      <div class="species-name">${t(`species.${sp.id}.name`)}</div>
     </div>
   `,
   ).join("");

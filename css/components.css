@@ -28,6 +28,48 @@
   margin-top: var(--space-xs);
 }
 
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  position: relative;
+}
+
+.lang-switcher {
+  display: flex;
+  gap: var(--space-xs);
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lang-btn {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0.2em 0.5em;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.lang-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.lang-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(218, 119, 86, 0.1);
+}
+
 /* ============================================
    Mechanics Grid
    ============================================ */
@@ -380,6 +422,17 @@
 @media (max-width: 600px) {
   .site-header h1 {
     font-size: 1.75rem;
+  }
+
+  .header-top {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .lang-switcher {
+    position: static;
+    transform: none;
+    justify-content: center;
   }
 
   .detail-panel {

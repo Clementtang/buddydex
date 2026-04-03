@@ -44,9 +44,14 @@
     <!-- Site Header -->
     <header class="site-header">
       <div class="container">
-        <h1>BuddyDex</h1>
-        <p class="subtitle">A field guide to Claude Buddies</p>
-        <p class="subtitle-note">
+        <div class="header-top">
+          <h1 id="site-title">BuddyDex</h1>
+          <div class="lang-switcher" id="lang-switcher"></div>
+        </div>
+        <p class="subtitle" id="site-subtitle">
+          A field guide to Claude Buddies
+        </p>
+        <p class="subtitle-note" id="site-note">
           ASCII art is original fan-art and may differ from actual in-game
           sprites
         </p>
@@ -66,7 +71,7 @@
       <!-- Species Collection -->
       <section id="collection">
         <div class="container">
-          <h2 class="section-title">Species</h2>
+          <h2 class="section-title" id="section-title">Species</h2>
           <div class="species-grid" id="species-grid">
             <!-- JS populates species cards here -->
           </div>
@@ -94,7 +99,7 @@
     <!-- Footer -->
     <footer class="site-footer">
       <div class="container">
-        <p>
+        <p id="footer-attribution">
           BuddyDex &mdash; An unofficial fan project by
           <a
             href="https://github.com/Clementtang"
@@ -103,13 +108,13 @@
             >Clement Tang</a
           >
         </p>
-        <p>
+        <p id="footer-trademark">
           "Claude", "Claude Code", and "Claude Buddy" are trademarks of
           <a href="https://www.anthropic.com" target="_blank" rel="noopener"
             >Anthropic, PBC</a
           >. Not affiliated with or endorsed by Anthropic.
         </p>
-        <p>
+        <p id="footer-source">
           <a
             href="https://github.com/Clementtang/buddydex"
             target="_blank"

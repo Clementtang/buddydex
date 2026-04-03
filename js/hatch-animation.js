@@ -1,4 +1,5 @@
 import { SPECIES } from "../data/species.js";
+import { t } from "./i18n.js";
 
 const EGG_FRAMES = [
   ["   ___  ", "  /   \\ ", " |     |", " |     |", "  \\___/ "],
@@ -22,7 +23,7 @@ export async function runHatchAnimation() {
   overlay.classList.add("visible");
 
   // Typewriter: "> Hatching..."
-  await typewriter(messageEl, "> Hatching...");
+  await typewriter(messageEl, t("hatch.hatching"));
 
   // Show egg frames
   for (const frame of EGG_FRAMES) {
@@ -38,7 +39,10 @@ export async function runHatchAnimation() {
 
   asciiEl.textContent = buddyArt;
   messageEl.textContent = "";
-  await typewriter(messageEl, `It's a ${species.name}!`);
+
+  const speciesName = t(`species.${species.id}.name`);
+  const revealText = t("hatch.reveal").replace("{name}", speciesName);
+  await typewriter(messageEl, revealText);
 
   // Wait then fade out
   await delay(1500);

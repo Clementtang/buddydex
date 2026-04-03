@@ -1,6 +1,7 @@
 import { SPECIES } from "../data/species.js";
 import { RARITIES } from "../data/rarity.js";
 import { EYES, HATS, getAvailableHats } from "../data/accessories.js";
+import { t } from "./i18n.js";
 
 const DEFAULT_EYE = EYES[0];
 const DEFAULT_RARITY = RARITIES[0];
@@ -52,7 +53,7 @@ export function setupDetailOverlay() {
 }
 
 export function openDetail(speciesId, detailRefs) {
-  const { overlay, preview, info, close } = detailRefs;
+  const { overlay, preview, info } = detailRefs;
   const species = SPECIES.find((s) => s.id === speciesId);
   if (!species) return;
 
@@ -79,23 +80,23 @@ export function openDetail(speciesId, detailRefs) {
 
     // Name
     const name = document.createElement("h2");
-    name.textContent = species.name;
+    name.textContent = t(`species.${species.id}.name`);
     info.appendChild(name);
 
     // Description
     const desc = document.createElement("p");
-    desc.textContent = species.description;
+    desc.textContent = t(`species.${species.id}.description`);
     info.appendChild(desc);
 
     // Rarity selector
     info.appendChild(
-      buildControlGroup("Rarity", () => {
+      buildControlGroup(t("detail.rarity"), () => {
         const wrapper = document.createElement("div");
         wrapper.className = "control-options";
         for (const rarity of RARITIES) {
           const button = document.createElement("button");
           button.className = "control-btn rarity-btn";
-          button.textContent = rarity.name;
+          button.textContent = t(`rarity.${rarity.id}`);
           button.style.borderColor = rarity.color;
           button.style.color = rarity.color;
           if (rarity.id === currentRarity.id) {
@@ -118,7 +119,7 @@ export function openDetail(speciesId, detailRefs) {
 
     // Shiny toggle
     info.appendChild(
-      buildControlGroup("Shiny", () => {
+      buildControlGroup(t("detail.shiny"), () => {
         const label = document.createElement("label");
         label.className = "shiny-toggle";
         const checkbox = document.createElement("input");
@@ -138,14 +139,14 @@ export function openDetail(speciesId, detailRefs) {
 
     // Eye picker
     info.appendChild(
-      buildControlGroup("Eyes", () => {
+      buildControlGroup(t("detail.eyes"), () => {
         const wrapper = document.createElement("div");
         wrapper.className = "control-options";
         for (const eye of EYES) {
           const button = document.createElement("button");
           button.className = "control-btn eye-btn";
           button.textContent = eye.symbol;
-          button.title = eye.name;
+          button.title = t(`eyes.${eye.id}`);
           if (eye.id === currentEye.id) {
             button.classList.add("selected");
           }
@@ -163,13 +164,13 @@ export function openDetail(speciesId, detailRefs) {
     // Hat picker
     const availableHats = getAvailableHats(currentRarity.id);
     info.appendChild(
-      buildControlGroup("Hats", () => {
+      buildControlGroup(t("detail.hats"), () => {
         const wrapper = document.createElement("div");
         wrapper.className = "control-options";
         for (const hat of HATS) {
           const button = document.createElement("button");
           button.className = "control-btn hat-btn";
-          button.textContent = hat.name;
+          button.textContent = t(`hats.${hat.id}`);
           const isAvailable = availableHats.find((h) => h.id === hat.id);
           if (!isAvailable) {
             button.classList.add("unavailable");

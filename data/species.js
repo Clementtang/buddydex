@@ -1,13 +1,11 @@
 // Original ASCII art for BuddyDex species.
 // Each species has 3 animation frames, 5 lines tall, ~12 chars wide.
 // {E} placeholder is replaced with the rolled eye character at render time.
+// Names and descriptions are in data/i18n.js.
 
 export const SPECIES = [
   {
     id: "duck",
-    name: "Duck",
-    description:
-      "A cheerful little duck. Quacks softly when idle, wags its tail feathers.",
     frames: [
       [
         "            ",
@@ -34,9 +32,6 @@ export const SPECIES = [
   },
   {
     id: "goose",
-    name: "Goose",
-    description:
-      "Taller and bolder than the duck. Will honk at you without hesitation.",
     frames: [
       [
         "            ",
@@ -63,9 +58,6 @@ export const SPECIES = [
   },
   {
     id: "cat",
-    name: "Cat",
-    description:
-      "A poised feline. Judges you silently with an air of mild disapproval.",
     frames: [
       [
         "            ",
@@ -92,8 +84,6 @@ export const SPECIES = [
   },
   {
     id: "rabbit",
-    name: "Rabbit",
-    description: "Long ears, twitchy nose, round body. Perpetually alert.",
     frames: [
       [
         "            ",
@@ -120,9 +110,6 @@ export const SPECIES = [
   },
   {
     id: "owl",
-    name: "Owl",
-    description:
-      "Round and wide-eyed. Rotates its head slightly between frames.",
     frames: [
       [
         "            ",
@@ -149,8 +136,6 @@ export const SPECIES = [
   },
   {
     id: "penguin",
-    name: "Penguin",
-    description: "A dapper tuxedo bird. Waddles side to side endlessly.",
     frames: [
       [
         "            ",
@@ -177,8 +162,6 @@ export const SPECIES = [
   },
   {
     id: "turtle",
-    name: "Turtle",
-    description: "Slow and steady. Carries its patterned shell with pride.",
     frames: [
       [
         "            ",
@@ -205,9 +188,6 @@ export const SPECIES = [
   },
   {
     id: "snail",
-    name: "Snail",
-    description:
-      "One eye on a stalk, spiral shell on its back. Leaves a slime trail.",
     frames: [
       [
         "            ",
@@ -234,9 +214,6 @@ export const SPECIES = [
   },
   {
     id: "dragon",
-    name: "Dragon",
-    description:
-      "Tiny but fierce. Sports horns and occasionally puffs smoke from its nostrils.",
     frames: [
       [
         "            ",
@@ -263,9 +240,6 @@ export const SPECIES = [
   },
   {
     id: "octopus",
-    name: "Octopus",
-    description:
-      "Round head, wavy tentacles underneath. Squishes and stretches constantly.",
     frames: [
       [
         "            ",
@@ -292,9 +266,6 @@ export const SPECIES = [
   },
   {
     id: "axolotl",
-    name: "Axolotl",
-    description:
-      "Feathery gills fan out from its smiling face. Perpetually happy.",
     frames: [
       [
         "            ",
@@ -321,9 +292,6 @@ export const SPECIES = [
   },
   {
     id: "ghost",
-    name: "Ghost",
-    description:
-      "A floating spectre with a wavy hem. Drifts upward when excited.",
     frames: [
       [
         "            ",
@@ -350,9 +318,6 @@ export const SPECIES = [
   },
   {
     id: "robot",
-    name: "Robot",
-    description:
-      "Boxy head, antenna on top. Its display panel flickers between frames.",
     frames: [
       [
         "            ",
@@ -379,9 +344,6 @@ export const SPECIES = [
   },
   {
     id: "blob",
-    name: "Blob",
-    description:
-      "An amorphous creature. Changes shape every frame — nobody knows its true form.",
     frames: [
       [
         "            ",
@@ -408,9 +370,6 @@ export const SPECIES = [
   },
   {
     id: "cactus",
-    name: "Cactus",
-    description:
-      "A potted succulent with stubby arms. Waves them at different heights.",
     frames: [
       [
         "            ",
@@ -437,9 +396,6 @@ export const SPECIES = [
   },
   {
     id: "mushroom",
-    name: "Mushroom",
-    description:
-      "A spotted toadstool. Its cap spots rearrange and it releases spores.",
     frames: [
       [
         "            ",
@@ -466,9 +422,6 @@ export const SPECIES = [
   },
   {
     id: "chonk",
-    name: "Chonk",
-    description:
-      "An extra-round cat of magnificent girth. Wears its weight with dignity.",
     frames: [
       [
         "            ",
@@ -495,9 +448,6 @@ export const SPECIES = [
   },
   {
     id: "capybara",
-    name: "Capybara",
-    description:
-      "The chillest creature around. Broad face, tiny ears, zero worries.",
     frames: [
       [
         "            ",
