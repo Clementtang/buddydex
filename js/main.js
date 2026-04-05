@@ -6,7 +6,8 @@ import { setupDetailOverlay, openDetail } from "./render-detail.js";
 
 const LANG_LABELS = {
   en: "English",
-  "zh-TW": "中文",
+  "zh-TW": "正體中文",
+  "zh-CN": "简体中文",
   ja: "日本語",
   ko: "한국어",
 };

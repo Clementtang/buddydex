@@ -604,4 +604,147 @@ export const TRANSLATIONS = {
     },
     sectionTitle: "종족 도감",
   },
+  "zh-CN": {
+    site: {
+      title: "BuddyDex",
+      subtitle: "Claude Buddy 图鉴",
+      note: "ASCII 图像为原创同人作品，可能与游戏内实际角色有所不同",
+    },
+    mechanics: {
+      rarity: {
+        title: "稀有度",
+        description:
+          "每只 Buddy 都有稀有度等级，影响数值与可用配件。{rarities}。",
+      },
+      shiny: {
+        title: "闪光",
+        description:
+          "任何 Buddy 都有独立的 1% 概率成为闪光个体。闪光 Buddy 的 ASCII 图像会有彩虹光效。",
+      },
+      accessories: {
+        title: "配件",
+        description:
+          "{eyeCount} 种眼睛样式与 {hatCount} 顶帽子可自定义你的 Buddy。稀有度越高，可解锁越多帽子。",
+      },
+    },
+    species: {
+      duck: {
+        name: "鸭子",
+        description: "一只开朗的小鸭。闲置时会轻声嘎嘎叫，摇摆尾羽。",
+      },
+      goose: {
+        name: "鹅",
+        description: "比鸭子高大且更有气势。会毫不犹豫地对你鸣叫。",
+      },
+      cat: {
+        name: "猫",
+        description: "一只优雅的猫。带着淡淡的不屑，默默地审视着你。",
+      },
+      rabbit: {
+        name: "兔子",
+        description: "长耳朵、抽动的鼻子、圆滚滚的身体。永远保持警觉。",
+      },
+      owl: {
+        name: "猫头鹰",
+        description: "圆圆的大眼睛。会在帧间微微转动头部。",
+      },
+      penguin: {
+        name: "企鹅",
+        description: "穿着燕尾服的绅士鸟。不停地左右摇摆。",
+      },
+      turtle: {
+        name: "乌龟",
+        description: "慢而稳重。骄傲地背着有花纹的龟壳。",
+      },
+      snail: {
+        name: "蜗牛",
+        description: "一只眼睛长在触角上，背着螺旋壳。爬过的地方留下黏液痕迹。",
+      },
+      dragon: {
+        name: "龙",
+        description: "小巧但凶猛。头上长角，偶尔从鼻孔喷出烟雾。",
+      },
+      octopus: {
+        name: "章鱼",
+        description: "圆圆的头，下方有波动的触手。不停地挤压伸缩。",
+      },
+      axolotl: {
+        name: "六角恐龙",
+        description: "羽状鳃从微笑的脸庞展开。永远都很快乐。",
+      },
+      ghost: {
+        name: "幽灵",
+        description: "飘浮的幽灵，下摆呈波浪状。兴奋时会向上飘。",
+      },
+      robot: {
+        name: "机器人",
+        description: "方方的头，顶部有天线。显示面板在帧间闪烁。",
+      },
+      blob: {
+        name: "史莱姆",
+        description: "一种不定形的生物。每帧都在变形——没人知道它的真实样貌。",
+      },
+      cactus: {
+        name: "仙人掌",
+        description: "盆栽多肉植物，有短短的手臂。会在不同高度挥动。",
+      },
+      mushroom: {
+        name: "蘑菇",
+        description: "有斑点的毒蕈。菌盖上的斑点会重新排列，还会释放孢子。",
+      },
+      chonk: {
+        name: "胖猫",
+        description: "一只体态丰腴的圆圆猫咪。带着尊严承担自己的体重。",
+      },
+      capybara: {
+        name: "水豚",
+        description: "最悠哉的生物。宽宽的脸、小小的耳朵、零烦恼。",
+      },
+    },
+    rarity: {
+      common: "普通",
+      uncommon: "稀有",
+      rare: "珍稀",
+      epic: "史诗",
+      legendary: "传说",
+    },
+    hats: {
+      none: "无",
+      crown: "皇冠",
+      tophat: "高礼帽",
+      propeller: "螺旋桨帽",
+      halo: "光环",
+      wizard: "巫师帽",
+      beanie: "毛线帽",
+      tinyduck: "迷你鸭",
+    },
+    eyes: {
+      dot: "圆点",
+      star: "星星",
+      cross: "叉叉",
+      bullseye: "靶心",
+      at: "小老鼠",
+      circle: "圆圈",
+    },
+    detail: {
+      rarity: "稀有度",
+      shiny: "闪光",
+      eyes: "眼睛",
+      hats: "帽子",
+    },
+    hatch: {
+      hatching: "> 孵化中...",
+      reveal: "是{name}！",
+    },
+    footer: {
+      attribution: "BuddyDex \u2014 非官方同人项目，作者",
+      trademark:
+        "\u201CClaude\u201D、\u201CClaude Code\u201D及\u201CClaude Buddy\u201D为",
+      anthropic: "Anthropic, PBC",
+      notAffiliated: "之商标。本站与 Anthropic 无关，亦未获其背书。",
+      source: "GitHub 源代码",
+      license: "MIT 许可证",
+    },
+    sectionTitle: "物种图鉴",
+  },
 };

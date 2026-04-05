@@ -1,6 +1,6 @@
 import { TRANSLATIONS } from "../data/i18n.js";
 
-const SUPPORTED_LANGS = ["en", "zh-TW", "ja", "ko"];
+const SUPPORTED_LANGS = ["en", "zh-TW", "zh-CN", "ja", "ko"];
 const DEFAULT_LANG = "en";
 const STORAGE_KEY = "buddydex-lang";
 
