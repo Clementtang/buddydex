@@ -119,3 +119,50 @@
   transform: translateX(16px);
   background: var(--accent);
 }
+
+/* ============================================
+   Mobile Controls
+   ============================================ */
+
+@media (max-width: 600px) {
+  .control-label {
+    font-size: 0.85rem;
+    margin-bottom: var(--space-sm);
+  }
+
+  .control-group {
+    margin-bottom: var(--space-lg);
+  }
+
+  .control-btn {
+    font-size: 0.85rem;
+    padding: 0.5em 0.8em;
+    min-height: 40px;
+  }
+
+  .eye-btn {
+    font-size: 1.1rem;
+    min-width: 2.5em;
+    min-height: 40px;
+  }
+
+  .hat-btn {
+    font-size: 0.8rem;
+  }
+
+  .shiny-toggle {
+    width: 48px;
+    height: 26px;
+  }
+
+  .toggle-slider::before {
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+  }
+
+  .shiny-toggle input:checked + .toggle-slider::before {
+    transform: translateX(22px);
+  }
+}
