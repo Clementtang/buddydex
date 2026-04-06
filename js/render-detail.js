@@ -30,12 +30,23 @@ export function setupDetailOverlay() {
 
   function close() {
     overlay.classList.remove("visible");
-    document.body.style.overflow = "";
+    // iOS Safari scroll lock fix — restore scroll position
+    const top = document.body.style.top;
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    window.scrollTo(0, -parseInt(top || "0"));
     if (animationInterval) {
       clearInterval(animationInterval);
       animationInterval = null;
     }
+    if (refs.focusTrapHandler) {
+      document.removeEventListener("keydown", refs.focusTrapHandler);
+      refs.focusTrapHandler = null;
+    }
   }
+
+  const refs = { overlay, panel, preview, info, close, focusTrapHandler: null };
 
   closeButton.addEventListener("click", close);
 
@@ -49,11 +60,11 @@ export function setupDetailOverlay() {
     }
   });
 
-  return { overlay, panel, preview, info, close };
+  return refs;
 }
 
 export function openDetail(speciesId, detailRefs) {
-  const { overlay, preview, info } = detailRefs;
+  const { overlay, panel, preview, info } = detailRefs;
   const species = SPECIES.find((s) => s.id === speciesId);
   if (!species) return;
 
@@ -192,17 +203,55 @@ export function openDetail(speciesId, detailRefs) {
   }
 
   // Animation
-  if (animationInterval) clearInterval(animationInterval);
+  if (animationInterval) {
+    clearInterval(animationInterval);
+    animationInterval = null;
+  }
   animationInterval = setInterval(() => {
     frameIndex = frameIndex === 0 ? 1 : 0;
     updatePreview();
   }, 800);
 
+  // aria-live on preview for screen readers
+  preview.setAttribute("aria-live", "polite");
+  preview.setAttribute("aria-label", t(`species.${species.id}.name`));
+
   buildControls();
   updatePreview();
 
   overlay.classList.add("visible");
-  document.body.style.overflow = "hidden";
+
+  // iOS Safari scroll lock fix — freeze body at current scroll position
+  const scrollY = window.scrollY;
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${scrollY}px`;
+  document.body.style.width = "100%";
+
+  // Focus trap — move focus to close button and constrain Tab within panel
+  const closeButton = document.getElementById("detail-close");
+  closeButton.focus();
+
+  function trapFocus(event) {
+    if (event.key !== "Tab") return;
+    const focusable = panel.querySelectorAll(
+      'button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+  if (detailRefs.focusTrapHandler) {
+    document.removeEventListener("keydown", detailRefs.focusTrapHandler);
+  }
+  detailRefs.focusTrapHandler = trapFocus;
+  document.addEventListener("keydown", trapFocus);
 }
 
 function buildControlGroup(label, buildContent) {

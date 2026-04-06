@@ -11,7 +11,7 @@ function renderAsciiFrame(species, eyeSymbol = DEFAULT_EYE) {
 export function renderSpeciesGrid(container) {
   container.innerHTML = SPECIES.map(
     (sp) => `
-    <div class="species-card" data-species-id="${sp.id}">
+    <div class="species-card" data-species-id="${sp.id}" tabindex="0" role="button" aria-label="${t(`species.${sp.id}.name`)}">
       <div class="ascii-art">${renderAsciiFrame(sp)}</div>
       <div class="species-name">${t(`species.${sp.id}.name`)}</div>
     </div>

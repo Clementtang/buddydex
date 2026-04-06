@@ -6,6 +6,7 @@ export const TRANSLATIONS = {
       note: "ASCII art is original fan-art and may differ from actual in-game sprites",
     },
     mechanics: {
+      sectionTitle: "How It Works",
       rarity: {
         title: "Rarity",
         description:
@@ -164,6 +165,7 @@ export const TRANSLATIONS = {
       note: "ASCII 圖像為原創同人創作，可能與遊戲內實際角色有所不同",
     },
     mechanics: {
+      sectionTitle: "系統機制",
       rarity: {
         title: "稀有度",
         description:
@@ -306,6 +308,7 @@ export const TRANSLATIONS = {
       note: "ASCIIアートはオリジナルのファンアートであり、ゲーム内の実際のスプライトとは異なる場合があります",
     },
     mechanics: {
+      sectionTitle: "システム概要",
       rarity: {
         title: "レアリティ",
         description:
@@ -455,6 +458,7 @@ export const TRANSLATIONS = {
       note: "ASCII 아트는 오리지널 팬아트이며, 실제 게임 내 스프라이트와 다를 수 있습니다",
     },
     mechanics: {
+      sectionTitle: "시스템 안내",
       rarity: {
         title: "희귀도",
         description:
@@ -611,6 +615,7 @@ export const TRANSLATIONS = {
       note: "ASCII 图像为原创同人作品，可能与游戏内实际角色有所不同",
     },
     mechanics: {
+      sectionTitle: "系统机制",
       rarity: {
         title: "稀有度",
         description:

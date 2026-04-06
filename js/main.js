@@ -18,6 +18,10 @@ function updateStaticText() {
   document.getElementById("site-note").textContent = t("site.note");
   document.getElementById("section-title").textContent = t("sectionTitle");
 
+  const mechanicsTitle = document.getElementById("mechanics-title");
+  if (mechanicsTitle)
+    mechanicsTitle.textContent = t("mechanics.sectionTitle") || "";
+
   // Footer
   document.getElementById("footer-attribution").innerHTML =
     `${t("footer.attribution")} <a href="https://github.com/Clementtang" target="_blank" rel="noopener">Clement Tang</a>`;
@@ -78,5 +82,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!card) return;
     const speciesId = card.dataset.speciesId;
     openDetail(speciesId, detailRefs);
+  });
+
+  speciesGrid.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const card = event.target.closest(".species-card");
+    if (!card) return;
+    event.preventDefault();
+    openDetail(card.dataset.speciesId, detailRefs);
   });
 });
