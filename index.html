@@ -62,6 +62,7 @@
       <!-- How It Works / Mechanics -->
       <section id="mechanics">
         <div class="container">
+          <h2 class="section-title" id="mechanics-title"></h2>
           <div class="mechanics-grid" id="mechanics-grid">
             <!-- JS populates mechanic cards here -->
           </div>
@@ -80,7 +81,12 @@
     </main>
 
     <!-- Detail Overlay — shown when a species card is clicked -->
-    <div id="detail-overlay" class="detail-overlay">
+    <div
+      id="detail-overlay"
+      class="detail-overlay"
+      role="dialog"
+      aria-modal="true"
+    >
       <div class="detail-panel" id="detail-panel">
         <button
           class="detail-close"

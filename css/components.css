@@ -118,13 +118,15 @@
   cursor: pointer;
   transition:
     transform 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    border-color 0.2s ease;
   text-align: center;
 }
 
 .species-card:hover {
   transform: translateY(-4px);
   background: var(--bg-card-hover);
+  border-color: var(--accent-dim);
 }
 
 .species-card .ascii-art {
@@ -134,7 +136,8 @@
   white-space: pre;
   color: var(--text-primary);
   margin-bottom: var(--space-sm);
-  min-height: 80px;
+  height: 90px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -255,17 +258,38 @@
   gap: var(--space-lg);
   padding: var(--space-xl);
   position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.detail-panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.detail-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.detail-panel::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
 }
 
 .detail-panel .detail-preview {
   font-family: var(--font-mono);
-  font-size: 3.2rem;
+  font-size: clamp(1.5rem, 4vw, 3.2rem);
   line-height: 1.3;
   white-space: pre;
   color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-x: hidden;
+  max-width: 100%;
+  animation: none;
+}
+
+.detail-overlay.visible .detail-preview {
   animation: idle-float 3s ease-in-out infinite;
 }
 
@@ -282,9 +306,16 @@
 /* Section title for Species */
 .section-title {
   font-family: var(--font-mono);
-  font-size: 1.1rem;
-  color: var(--text-secondary);
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   margin-bottom: var(--space-lg);
+}
+
+.detail-panel .detail-info {
+  border-left: 1px solid var(--border);
+  padding-left: var(--space-lg);
 }
 
 .detail-panel .detail-info h2 {
@@ -392,6 +423,12 @@
   text-decoration: underline;
 }
 
+.site-footer a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* ============================================
    Shiny Text Effect
    ============================================ */
@@ -441,12 +478,22 @@
     justify-content: center;
   }
 
+  .lang-btn {
+    font-size: 0.8rem;
+    min-height: 40px;
+    padding: 0.4em 0.8em;
+    display: inline-flex;
+    align-items: center;
+  }
+
   /* Detail modal — full-screen on mobile */
   .detail-overlay {
     align-items: flex-start;
   }
 
   .detail-panel {
+    display: flex;
+    flex-direction: column;
     grid-template-columns: 1fr;
     width: 100%;
     max-width: 100%;
@@ -456,11 +503,26 @@
     gap: var(--space-md);
   }
 
+  .detail-close {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-card);
+    align-self: flex-end;
+    flex-shrink: 0;
+    font-size: 2.2rem;
+  }
+
   .detail-panel .detail-preview {
-    font-size: 1.8rem;
     line-height: 1.2;
     min-height: auto;
-    overflow-x: hidden;
+  }
+
+  .detail-panel .detail-info {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-left: 0;
+    padding-top: var(--space-md);
   }
 
   .detail-panel .detail-info h2 {
@@ -472,13 +534,24 @@
     line-height: 1.6;
   }
 
-  .detail-close {
-    top: var(--space-sm);
-    right: var(--space-sm);
-    font-size: 2.2rem;
-  }
-
   .species-grid {
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+}
+
+/* ============================================
+   Reduced Motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .detail-panel .detail-preview,
+  .shiny-text,
+  .hatch-overlay {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .species-card {
+    transition: none !important;
   }
 }
