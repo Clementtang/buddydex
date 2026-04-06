@@ -14,6 +14,8 @@ A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet compan
   - Preview 8 hat accessories (availability depends on rarity)
 - **System Mechanics** — Overview of rarity probabilities, shiny mechanics, and accessory system
 - **Hatch Animation** — First-time visitors see a terminal-style egg hatching sequence
+- **Multilingual** — English, 正體中文, 简体中文, 日本語, 한국어 with auto-detection
+- **Accessible** — Keyboard navigation, focus traps, ARIA roles, `prefers-reduced-motion` support
 
 ## Tech Stack
 
@@ -39,7 +41,7 @@ If Anthropic believes any content in this project infringes on their intellectua
 
 This project's **source code** (HTML, CSS, JavaScript logic) is released under the [MIT License](LICENSE).
 
-The **buddy character designs, names, and ASCII art** originate from Anthropic's Claude Code product. Those creative assets remain the intellectual property of Anthropic, PBC and are reproduced here under fair use for fan/educational purposes. This license does not grant rights to Anthropic's intellectual property.
+The **buddy species names and game mechanics** originate from Anthropic's Claude Code product and remain the intellectual property of Anthropic, PBC. The ASCII art in this project is original fan-art and does not represent official Anthropic assets.
 
 ## Author
 
