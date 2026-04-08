@@ -145,6 +145,22 @@
 - **使用者價值**：低。已有 5 語系支援，可在詳細頁顯示該 Buddy 在各語言的名稱
 - **實作方向**：詳細頁底部加入名稱對照表格
 
+#### 3.10 Buddy 自訂教學指南
+
+- **參考來源**：Serebii 攻略指南、Bulbapedia 遊戲機制教學、JD Hodges buddy guide
+- **預估工時**：S（小）
+- **使用者價值**：高。許多使用者不知道可以修改 buddy 的名稱、人格描述、回覆語言。這是 Claude Buddy 系統最實用但最少被記錄的功能
+- **實作方向**：
+  - 新增「Customize Your Buddy」教學 section 或獨立頁面
+  - 涵蓋三個主題：
+    1. **修改名稱**：編輯 `~/.claude.json` 中 companion 的 `name` 欄位，或刪除後重新孵化讓 LLM 重新命名
+    2. **修改人格描述**：編輯 companion 的 `personality` / `description` 欄位，影響 buddy 的對話風格
+    3. **修改回覆語言**：在 personality 中加入語言偏好指示（如「Always respond in Japanese」），讓 buddy 用指定語言互動
+  - 附上 `~/.claude.json` 的相關欄位結構範例（脫敏）
+  - 注意事項提醒：bones layer（外觀、稀有度）每次 session 重新計算會覆蓋手動修改，但 soul layer（名稱、人格）是永久儲存的
+  - 多語系支援（教學文字本身也需翻譯）
+- **風險**：需確認揭露 `~/.claude.json` 結構不違反 Anthropic ToS。建議僅說明使用者可編輯的欄位，不涉及系統內部機制
+
 ---
 
 ## 4. 跳脫框架的創意功能
@@ -262,6 +278,7 @@
 Phase 1（快速見效）
 ├── 搜尋與篩選 (P0, 3.1)
 ├── 分享功能 (P0, 3.3)
+├── Buddy 自訂教學指南 (P1, 3.10)
 └── 隨機探索按鈕 (P2, 3.8)
 
 Phase 2（收藏體驗）
