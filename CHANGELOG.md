@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-04-08
+
+### Added
+
+- Custom domain: `buddydex.chatbot.tw`
+- `sitemap.xml` and `robots.txt` for search engine indexing
+- Canonical URL, OG locale tags, and Twitter card meta tags for SEO
+- Google Search Console property with sitemap submitted
+- Phase 1 PRD and encyclopedia benchmark research document
+
 ## [1.3.0] - 2026-04-06
 
 ### Added
