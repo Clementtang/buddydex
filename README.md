@@ -43,6 +43,10 @@ This project's **source code** (HTML, CSS, JavaScript logic) is released under t
 
 The **buddy species names and game mechanics** originate from Anthropic's Claude Code product and remain the intellectual property of Anthropic, PBC. The ASCII art in this project is original fan-art and does not represent official Anthropic assets.
 
+## Forking
+
+If you fork this project, remember to replace the Google Analytics ID in `index.html` (`G-1CTR65SW2P`) with your own, or remove the GA script entirely.
+
 ## Author
 
 Built by [Clement Tang](https://github.com/Clementtang) as a fan project.
