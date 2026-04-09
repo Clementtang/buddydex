@@ -39,8 +39,8 @@ Eyes: Dot `·`, Star `✦`, Cross `×`, Bullseye `◉`, At `@`, Circle `°`
 
 ### 3. Species Grid (18 cards)
 
-- Pixel art buddy + name + rarity badge on each card
-- Filter by rarity
+- ~~Pixel art buddy + name + rarity badge on each card~~ → Implemented as ASCII art + name only. Rarity badge omitted because species and rarity are independent in the buddy system (rarity is rolled separately, not tied to species).
+- ~~Filter by rarity~~ → Removed during implementation. Species don't have inherent rarities, so filtering by rarity on the grid is not meaningful.
 - Click to expand overlay with detail view
 
 ### 4. Footer
