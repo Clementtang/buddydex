@@ -2,7 +2,7 @@
 
 A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet companions in Claude Code.
 
-**Live site:** [buddydex.vercel.app](https://buddydex.vercel.app) (or your deployed URL)
+**Live site:** [buddydex.chatbot.tw](https://buddydex.chatbot.tw)
 
 ## Features
 
