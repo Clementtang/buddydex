@@ -1,15 +1,24 @@
-# BuddyDex Phase 1 產品需求文件（PRD）
+# BuddyDex Phase 0 + Phase 1 產品需求文件（PRD）
 
-> 版本：1.0
+> 版本：2.0
 > 日期：2026-04-09
-> 狀態：草稿
-> 依據：`docs/research/encyclopedia-benchmarks.md` Phase 1 路線圖
+> 狀態：已審查（回應 `docs/devils-advocate-review.md`）
+> 依據：`docs/research/encyclopedia-benchmarks.md` + devil's advocate review
 
 ---
 
+## 目標用戶
+
+| Persona              | 描述                                           | 核心需求             |
+| -------------------- | ---------------------------------------------- | -------------------- |
+| **Claude Code 新手** | 剛拿到 buddy，想了解自己拿到的是什麼、有多稀有 | 物種資訊、自訂教學   |
+| **社群分享者**       | 想展示自己的 buddy 配置給朋友看                | 分享連結、視覺吸引力 |
+| **路過的好奇者**     | 從社群連結進來瀏覽                             | 快速載入、直覺導覽   |
+
 ## 概述
 
-Phase 1 聚焦於「快速見效」的功能，以最小工時提升核心體驗並帶動自然流量。
+- **Phase 0**：技術債清理和基礎建設，Phase 1 開發的前置作業
+- **Phase 1**：聚焦分享體驗和內容補強，以最小工時帶動自然流量
 
 ## 技術限制（全域）
 
@@ -17,175 +26,231 @@ Phase 1 聚焦於「快速見效」的功能，以最小工時提升核心體驗
 - 使用者狀態僅存 localStorage
 - 須支援 5 語系（en / zh-TW / zh-CN / ja / ko）
 - 遵守現有無障礙標準（ARIA、focus 管理、`prefers-reduced-motion`）
+- XSS 防範：使用者輸入不經過 `innerHTML`，一律用 `textContent` 或 DOM API
 - 每個功能獨立 commit，不混合
 
----
+## 與研究報告的差異說明
 
-## Feature 1：搜尋與篩選系統
+研究報告（`encyclopedia-benchmarks.md`）將「搜尋與篩選」和「卡片全息光效」列為 P0。本 PRD 做了以下調整：
 
-### 目標
-
-讓使用者能快速定位特定物種，並依條件探索物種庫。
-
-### 使用者故事
-
-- 身為使用者，我想透過輸入名稱來快速找到特定 buddy，這樣我不用從 18 張卡片中逐一尋找。
-- 身為使用者，我想按物種名稱排序，這樣我可以用字母順序瀏覽。
-
-### 功能規格
-
-1. **即時搜尋框**
-   - 放在 Species section title 旁邊
-   - 輸入文字即時篩選卡片（模糊匹配物種名稱，支援當前語系）
-   - 空白時顯示全部
-   - placeholder 文字隨語系切換
-
-2. **排序**
-   - 預設：依 species data 原始順序（即編號）
-   - 可切換：名稱字母序（依當前語系排序）
-
-### 驗收條件
-
-- [ ] 搜尋框輸入「cat」顯示 Cat，輸入「貓」顯示貓（zh-TW 模式下）
-- [ ] 搜尋無結果時顯示空狀態提示文字
-- [ ] 排序切換後卡片動態重排
-- [ ] 搜尋框有 `aria-label`，結果區有 `aria-live="polite"` 通知篩選結果數量
-- [ ] 語系切換後搜尋框 placeholder 更新
-
-### 預估工時
-
-M（中）
+| 研究報告建議       | PRD 決定       | 原因                                                  |
+| ------------------ | -------------- | ----------------------------------------------------- |
+| 搜尋與篩選（P0）   | 移至 Phase 2   | 18 隻物種一屏可覽，搜尋需求待 GA4 數據驗證（C2 回饋） |
+| 卡片全息光效（P0） | 移至 Phase 2   | 純視覺增強，不直接帶動流量或解決使用者痛點            |
+| 隨機探索（P2）     | 提升至 Phase 1 | 工時 S，搭配 URL hash 可提升探索趣味                  |
+| 教學指南（P1）     | 維持 Phase 1   | persona 1 的核心需求，工時 S                          |
 
 ---
 
-## Feature 2：分享功能
+## Phase 0：技術債清理
 
-### 目標
+> 在 Phase 1 功能開發前完成。
 
-讓使用者能分享特定 buddy 給朋友或社群，帶動自然流量。
+### 0.1 i18n 檔案拆分
 
-### 使用者故事
+**目標**：將 `data/i18n.js`（755 行）拆分為獨立語系檔案，支援動態載入。
 
-- 身為使用者，我想複製一個連結直接開啟某隻 buddy 的詳細頁，這樣我可以分享給朋友。
+**規格**：
+
+- 拆分為 `data/i18n/en.js`、`data/i18n/zh-TW.js`、`data/i18n/zh-CN.js`、`data/i18n/ja.js`、`data/i18n/ko.js`
+- `js/i18n.js` 改用動態 `import()` 只載入當前語系
+- 語系切換時動態載入新語系檔案
+
+**驗收條件**：
+
+- [ ] 每個語系一個獨立檔案
+- [ ] 首次載入只下載一個語系的翻譯
+- [ ] 語系切換後正確載入新翻譯
+- [ ] 現有功能不受影響
+
+### 0.2 基本測試 + CI
+
+**目標**：建立最小可行的測試基礎建設。
+
+**規格**：
+
+- 建立 `package.json`，加入 Vitest
+- 測試 `data/accessories.js`（`getAvailableHats` 邏輯）
+- 測試 `js/i18n.js`（`t()` fallback 邏輯）
+- GitHub Actions：push to main 時跑 `npm test`
+
+**驗收條件**：
+
+- [ ] `npm test` 可執行且通過
+- [ ] GitHub Actions 綠燈
+- [ ] 至少覆蓋 `getAvailableHats` 和 `t()` 函式
+
+### 0.3 安全性 headers
+
+**目標**：加入基本的 HTTP 安全性 headers。
+
+**規格**：
+在 `vercel.json` 加入：
+
+- `Content-Security-Policy`：限制 `script-src` 為 `self` + `googletagmanager.com`
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: DENY`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+
+**驗收條件**：
+
+- [ ] Response headers 包含上述四項
+- [ ] GA4 正常運作（不被 CSP 阻擋）
+- [ ] Google Fonts 正常載入
+
+### 0.4 aria-live 修正
+
+**目標**：修正 detail modal 的 aria-live 每 800ms 過度觸發問題。
+
+**規格**：
+
+- 動畫循環不觸發 aria-live
+- 僅在使用者主動切換配件時播報
+- 使用獨立的 visually-hidden 元素播報狀態變更
+
+**驗收條件**：
+
+- [ ] 開啟 detail modal 後 screen reader 不會每 800ms 收到通知
+- [ ] 切換眼睛/帽子/稀有度時 screen reader 播報變更
+
+### 0.5 文件修正
+
+- CHANGELOG 補上版本比較連結（m2）
+- 設計文件加註被省略的設計決策（m8）
+- README 加註 fork 使用者替換 GA ID（m1）
+
+---
+
+## Phase 1：分享體驗 + 內容補強
+
+> Phase 0 完成後開始。
+> Done 的最小條件：Feature 1 + Feature 2 上線。
+> 上線後觀察 GA4 數據 7 天再決定 Phase 2。
+
+### Feature 1：分享功能
+
+**目標**：讓使用者能分享特定 buddy，帶動自然流量。服務 persona 2（社群分享者）和 persona 3（路過好奇者）。
+
+**使用者故事**：
+
+- 身為使用者，我想複製一個連結直接開啟某隻 buddy 的詳細頁，分享給朋友。
 - 身為行動裝置使用者，我想用系統原生分享選單分享 buddy。
 
-### 功能規格
+**前置作業**：
+
+- 製作 1200x630 OG image（m7，分享連結需要預覽圖）
+
+**功能規格**：
 
 1. **URL hash 路由**
-   - 開啟 `buddydex.chatbot.tw/#duck` 自動打開 Duck 的 detail modal
-   - 開啟 detail modal 時自動更新 URL hash
+   - `buddydex.chatbot.tw/#duck` 自動打開 Duck 的 detail modal
+   - 開啟 detail modal 時更新 URL hash
    - 關閉 modal 時清除 hash
-   - 支援瀏覽器前進/後退
+   - 瀏覽器前進/後退支援
+   - URL 包含 hash 時自動跳過 hatch animation（m3）
 
 2. **複製連結按鈕**
-   - 在 detail modal 內，物種名稱旁加一個鏈結圖示按鈕
-   - 點擊後複製完整 URL 到剪貼簿
-   - 顯示短暫的「已複製」回饋（tooltip 或 toast）
+   - detail modal 內，物種名稱旁
+   - 點擊後複製 URL，短暫顯示「已複製」回饋
 
 3. **Web Share API（行動裝置）**
    - 偵測 `navigator.share` 支援
-   - 支援時顯示「分享」按鈕，觸發原生分享選單
-   - 不支援時 fallback 到複製連結
+   - 支援時顯示「分享」按鈕，fallback 到複製連結
 
-### 驗收條件
+**驗收條件**：
 
-- [ ] 直接造訪 `#duck` URL 可開啟 Duck detail modal
-- [ ] 瀏覽器返回鍵可關閉 modal
-- [ ] 複製連結按鈕正確複製 URL 並顯示回饋
-- [ ] 行動裝置上 Web Share API 正常觸發
-- [ ] 所有按鈕有適當的 `aria-label`
+- [ ] `#duck` URL 開啟 Duck detail modal
+- [ ] URL 帶 hash 時跳過 hatch animation
+- [ ] 瀏覽器返回鍵關閉 modal
+- [ ] 複製連結正確複製 URL 並顯示回饋
+- [ ] Web Share API 在支援的行動裝置上觸發
+- [ ] OG image 在社群平台分享時正確顯示
+- [ ] Chrome DevTools mobile emulation（iPhone SE, Pixel 5）驗收通過
 
-### 預估工時
-
-S（小）
-
----
-
-## Feature 3：Buddy 自訂教學指南
-
-### 目標
-
-教使用者如何自訂 Claude Buddy 的名稱、人格描述和回覆語言。
-
-### 使用者故事
-
-- 身為 Claude Code 使用者，我想知道如何改變 buddy 的名字，這樣我可以給牠一個有意義的名稱。
-- 身為非英語使用者，我想讓 buddy 用我的母語回覆，這樣互動體驗更好。
-
-### 功能規格
-
-1. **教學內容 section**
-   - 放在 mechanics section 下方，Species grid 上方
-   - 或作為獨立的摺疊區塊（accordion），預設收合
-   - 三個主題：
-     - 修改名稱：編輯 `~/.claude.json` 中 companion `name` 欄位
-     - 修改人格：編輯 `personality` / `description` 欄位
-     - 修改語言：在 personality 加入語言偏好指示
-
-2. **內容限制**
-   - 僅說明使用者可編輯的 soul layer 欄位
-   - 不涉及 bones layer 內部機制（hash、PRNG 等）
-   - 附上脫敏的 JSON 結構範例
-   - 提醒：外觀（species、rarity）每次 session 重算，不可手動修改
-
-3. **多語系**
-   - 教學文字需翻譯至 5 語系
-   - JSON 範例保持英文
-
-### 驗收條件
-
-- [ ] 教學內容在 5 個語系下正確顯示
-- [ ] 教學區塊可收合/展開
-- [ ] JSON 範例使用 `<code>` 區塊且等寬字體
-- [ ] 不洩漏系統敏感資訊（hash salt、PRNG 種子等）
-
-### 預估工時
-
-S（小）
+**預估工時**：S
 
 ---
 
-## Feature 4：隨機探索按鈕
+### Feature 2：隨機探索按鈕
 
-### 目標
+**目標**：增加探索趣味，服務 persona 3（路過好奇者）。
 
-增加探索趣味性，讓使用者發現意想不到的 buddy。
+**使用者故事**：
 
-### 使用者故事
+- 身為使用者，我想按一個按鈕隨機看到一隻 buddy。
 
-- 身為使用者，我想按一個按鈕就隨機看到一隻 buddy 的詳細資訊，這樣我可以無目的地探索。
+**功能規格**：
 
-### 功能規格
+- 按鈕放在 Species section title 旁邊
+- 點擊隨機選一隻 buddy，開啟 detail modal，更新 URL hash
+- 連續點擊不重複上一隻
 
-1. **按鈕位置**
-   - 放在 Species section title 旁邊（與搜尋框同行）
-   - 骰子圖示 🎲 或文字按鈕
+**驗收條件**：
 
-2. **行為**
-   - 點擊後隨機選一隻 buddy，打開其 detail modal
-   - 更新 URL hash
-   - 連續點擊不重複上一隻（除非只剩一隻符合篩選條件）
+- [ ] 按鈕點擊開啟隨機 buddy 的 detail modal
+- [ ] 連續兩次不出現同一隻
+- [ ] 按鈕有 `aria-label`，鍵盤可操作
+- [ ] 文字隨語系切換
 
-### 驗收條件
-
-- [ ] 按鈕點擊打開隨機 buddy 的 detail modal
-- [ ] 連續兩次點擊不會出現同一隻
-- [ ] 按鈕有 `aria-label` 和鍵盤可操作
-- [ ] 按鈕文字隨語系切換
-
-### 預估工時
-
-S（小）
+**預估工時**：S
 
 ---
 
-## 優先順序
+### Feature 3：Buddy 自訂教學指南
 
-| 順序 | 功能                 | 工時 | 依賴          |
-| ---- | -------------------- | ---- | ------------- |
-| 1    | 分享功能（URL hash） | S    | 無            |
-| 2    | 隨機探索按鈕         | S    | 依賴 URL hash |
-| 3    | 搜尋與篩選           | M    | 無            |
-| 4    | Buddy 自訂教學指南   | S    | 無            |
+**目標**：教使用者自訂 buddy，服務 persona 1（Claude Code 新手）。
 
-分享功能優先，因為 URL hash 路由是其他功能（隨機探索）的基礎，且能直接帶動自然流量。
+**使用者故事**：
+
+- 身為 Claude Code 使用者，我想知道如何改 buddy 名字和人格。
+- 身為非英語使用者，我想讓 buddy 用我的母語回覆。
+
+**功能規格**：
+
+- 摺疊區塊（accordion），預設收合
+- 三個主題：修改名稱、修改人格、修改語言
+- 定位為「社群發現的技巧」，非官方功能說明（m5）
+- 教學 section 頂部加 disclaimer
+- JSON 範例脫敏，不涉及 bones layer
+
+**驗收條件**：
+
+- [ ] 5 語系正確顯示
+- [ ] 可收合/展開
+- [ ] JSON 範例等寬字體
+- [ ] 不洩漏系統敏感資訊
+- [ ] 有 disclaimer 聲明
+
+**預估工時**：S
+
+---
+
+### Phase 1 附帶修正
+
+| 項目                                           | 來源 |
+| ---------------------------------------------- | ---- |
+| Hatch animation 可跳過（點擊 + hash 自動跳過） | m3   |
+| 三幀動畫實作（偶爾觸發 frame 2）               | M6   |
+| 行動版語言切換器改為下拉選單                   | M3   |
+
+---
+
+## Phase 1 Done 定義
+
+Phase 1 完成 = Feature 1（分享）+ Feature 2（隨機探索）已上線。Feature 3（教學指南）和附帶修正為加分項。
+
+上線後用 GA4 觀察 7 天：
+
+- 分享連結帶來的流量（referrer 分析）
+- 使用者停留時間和跳出率
+- 根據數據決定 Phase 2 方向
+
+---
+
+## Phase 2 Backlog（待 GA4 數據驗證後決定）
+
+| 功能                  | 條件                                              |
+| --------------------- | ------------------------------------------------- |
+| 搜尋與篩選            | 物種數量增加，或 GA4 顯示使用者在 grid 上大量滾動 |
+| 卡片全息光效          | 分享功能上線後，需要更強的視覺吸引力              |
+| 收藏追蹤 + 抽卡模擬器 | Phase 1 數據顯示使用者有回訪意願                  |
