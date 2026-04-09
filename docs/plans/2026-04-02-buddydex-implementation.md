@@ -1,4 +1,7 @@
-# BuddyDex Implementation Plan
+# BuddyDex Implementation Plan [COMPLETED]
+
+> Status: All 7 tasks completed and deployed as v1.0.0 on 2026-04-02.
+> This plan is historical reference only. For future work, see `docs/prd.md`.
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
