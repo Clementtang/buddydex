@@ -2,6 +2,10 @@
 // Each species has 3 animation frames, 5 lines tall, ~12 chars wide.
 // {E} placeholder is replaced with the rolled eye character at render time.
 // Names and descriptions are in data/i18n.js.
+//
+// Note: frames[0] and frames[1] form the idle animation loop (800ms cycle).
+// frames[2] is reserved for future special actions (e.g. sneeze, wink, greeting)
+// and is currently unused. See devils-advocate-review.md M6.
 
 export const SPECIES = [
   {
