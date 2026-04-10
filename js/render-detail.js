@@ -8,6 +8,28 @@ const DEFAULT_RARITY = RARITIES[0];
 
 let animationInterval = null;
 
+// Constructable stylesheet used to inject the dynamic `top` offset for the
+// body scroll lock. Writing JS inline styles (body.style.top = ...) would
+// require CSP `style-src 'unsafe-inline'`; mutating an adopted stylesheet
+// does not. See docs/prd.md Phase 0 task 0.A.6.
+const scrollLockSheet = new CSSStyleSheet();
+document.adoptedStyleSheets = [...document.adoptedStyleSheets, scrollLockSheet];
+
+function lockBodyScroll() {
+  const scrollY = window.scrollY;
+  scrollLockSheet.replaceSync(`body.scroll-locked { top: -${scrollY}px; }`);
+  document.body.dataset.scrollY = String(scrollY);
+  document.body.classList.add("scroll-locked");
+}
+
+function unlockBodyScroll() {
+  const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
+  document.body.classList.remove("scroll-locked");
+  delete document.body.dataset.scrollY;
+  scrollLockSheet.replaceSync("");
+  window.scrollTo(0, scrollY);
+}
+
 function renderAscii(species, frameIndex, eyeSymbol, hatAscii) {
   const frame = species.frames[frameIndex];
   return frame
@@ -30,12 +52,7 @@ export function setupDetailOverlay() {
 
   function close() {
     overlay.classList.remove("visible");
-    // iOS Safari scroll lock fix — restore scroll position
-    const top = document.body.style.top;
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.width = "";
-    window.scrollTo(0, -parseInt(top || "0"));
+    unlockBodyScroll();
     if (animationInterval) {
       clearInterval(animationInterval);
       animationInterval = null;
@@ -107,9 +124,8 @@ export function openDetail(speciesId, detailRefs) {
         for (const rarity of RARITIES) {
           const button = document.createElement("button");
           button.className = "control-btn rarity-btn";
+          button.dataset.rarity = rarity.id;
           button.textContent = t(`rarity.${rarity.id}`);
-          button.style.borderColor = rarity.color;
-          button.style.color = rarity.color;
           if (rarity.id === currentRarity.id) {
             button.classList.add("selected");
           }
@@ -222,10 +238,7 @@ export function openDetail(speciesId, detailRefs) {
   overlay.classList.add("visible");
 
   // iOS Safari scroll lock fix — freeze body at current scroll position
-  const scrollY = window.scrollY;
-  document.body.style.position = "fixed";
-  document.body.style.top = `-${scrollY}px`;
-  document.body.style.width = "100%";
+  lockBodyScroll();
 
   // Focus trap — move focus to close button and constrain Tab within panel
   const closeButton = document.getElementById("detail-close");

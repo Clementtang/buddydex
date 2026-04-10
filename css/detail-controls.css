@@ -61,9 +61,40 @@
   font-size: 0.85rem;
 }
 
-/* Rarity buttons — colored border */
+/* Rarity buttons — color sourced from data-rarity attribute so JS
+   never writes inline style (required by strict CSP — no 'unsafe-inline'). */
+.rarity-btn[data-rarity="common"] {
+  color: var(--rarity-common);
+  border-color: var(--rarity-common);
+}
+.rarity-btn[data-rarity="uncommon"] {
+  color: var(--rarity-uncommon);
+  border-color: var(--rarity-uncommon);
+}
+.rarity-btn[data-rarity="rare"] {
+  color: var(--rarity-rare);
+  border-color: var(--rarity-rare);
+}
+.rarity-btn[data-rarity="epic"] {
+  color: var(--rarity-epic);
+  border-color: var(--rarity-epic);
+}
+.rarity-btn[data-rarity="legendary"] {
+  color: var(--rarity-legendary);
+  border-color: var(--rarity-legendary);
+}
+
 .rarity-btn.selected {
   background: rgba(255, 255, 255, 0.05);
+}
+
+/* iOS Safari scroll lock — body gets position: fixed while a modal is open.
+   The dynamic top offset is injected via a constructable CSSStyleSheet in
+   render-detail.js (see lockScroll/unlockScroll) so no JS inline style
+   writes are needed and CSP style-src can drop 'unsafe-inline'. */
+body.scroll-locked {
+  position: fixed;
+  width: 100%;
 }
 
 /* Hat buttons */
