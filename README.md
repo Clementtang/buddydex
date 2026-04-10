@@ -4,6 +4,8 @@ A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet compan
 
 **Live site:** [buddydex.chatbot.tw](https://buddydex.chatbot.tw)
 
+> **Looking for a leaderboard instead?** Check out [buddyboard.xyz](https://buddyboard.xyz) — a competitive leaderboard and shareable trading cards for Claude Code `/buddy` companions. BuddyDex focuses on browsing and content depth (descriptions, try-on, 5 languages); Buddy Board focuses on social submission and ranking. The two projects are complementary.
+
 ## Features
 
 - **Species Gallery** — All 18 buddy species displayed as ASCII art cards with idle animations
@@ -23,6 +25,13 @@ A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet compan
 - ES modules
 - CSS custom properties for theming
 - Deployed on Vercel
+
+## Documentation
+
+- [`DESIGN.md`](DESIGN.md) — Living design system reference (colors, typography, rarity treatments, accessibility, decisions log)
+- [`CHANGELOG.md`](CHANGELOG.md) — Release history
+- [`docs/prd.md`](docs/prd.md) — Current product requirements (Phase 0 + Phase 1)
+- [`docs/research/`](docs/research/) — Benchmarks and competitive analysis
 
 ## Data Sources
 
