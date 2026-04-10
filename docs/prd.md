@@ -1,9 +1,9 @@
 # BuddyDex Phase 0 + Phase 1 產品需求文件（PRD）
 
-> 版本：2.1
+> 版本：2.2
 > 日期：2026-04-10
-> 狀態：已審查（round 1 + round 2）
-> 依據：`docs/research/encyclopedia-benchmarks.md` + `docs/devils-advocate-review.md` + `docs/devils-advocate-review-round2.md`
+> 狀態：已審查（round 1 + round 2）+ 競品分析（buddyboard.xyz）
+> 依據：`docs/research/encyclopedia-benchmarks.md` + `docs/research/buddyboard-analysis.md` + `docs/devils-advocate-review.md` + `docs/devils-advocate-review-round2.md`
 
 ---
 
@@ -39,6 +39,40 @@
 | 卡片全息光效（P0） | 移至 Phase 2   | 純視覺增強，不直接帶動流量或解決使用者痛點            |
 | 隨機探索（P2）     | 提升至 Phase 1 | 工時 S，搭配 URL hash 可提升探索趣味                  |
 | 教學指南（P1）     | 維持 Phase 1   | persona 1 的核心需求，工時 S                          |
+
+---
+
+## 與 buddyboard.xyz 的差異化
+
+2026-04-03 出現的競品 `buddyboard.xyz`（repo: `TanayK07/buddy-board`）同樣源自 Claude Code `/buddy` 機制。完整分析見 `docs/research/buddyboard-analysis.md`。
+
+### 定位差異
+
+| 面向     | Buddy Board                        | BuddyDex                |
+| -------- | ---------------------------------- | ----------------------- |
+| 核心     | 社交 leaderboard + 競技 + 卡片分享 | 圖鑑 / 參考 / 瀏覽      |
+| 門檻     | 高（`npx buddy-board` 提交）       | 零（直接瀏覽）          |
+| 技術     | Next.js + Supabase + CLI           | 純靜態                  |
+| 法律姿態 | 「忠實重製 Claude Code 機制」      | 「原創 ASCII 同人藝術」 |
+| 內容深度 | 子頁 `/dex` 只有 ASCII + 名稱      | 描述 / 稀有度 / try-on  |
+
+### Non-goals（基於競品分析）
+
+- **不做 leaderboard / 社交 / 提交機制**。純靜態是戰略優勢，不複製對手的後端路線
+- **不做「未發現物種」disclosure**。提交量成長時會光速耗盡，機制撐不住
+- **不改名**。buddyboard 提交動能停滯（5 stars、6 天未推），不構成命名生存威脅
+- **不用 CLI 作為主要流程**。會限縮 persona 3（路過好奇者）
+
+### 可借鑒項目（納入本 PRD）
+
+| #   | 項目                        | 處置                                                         |
+| --- | --------------------------- | ------------------------------------------------------------ |
+| 1   | 五維 Stats 系統             | **Phase 1 Feature 4（新）** — Claude Code `/buddy` 原生屬性  |
+| 2   | Root-level DESIGN.md        | **Phase 0 批次 A 新增任務** — 獨立 living design system      |
+| 3   | Legendary holographic foil  | Phase 2 backlog 現有項，補 buddyboard DESIGN.md CSS 實作參考 |
+| 4   | Decisions Log table         | 併入新建的 DESIGN.md                                         |
+| 5   | Mulberry32 algorithm 文件化 | Phase 2 backlog（新項）— 將 BuddyDex 定位為 canonical ref    |
+| 6   | GitHub repo topics          | **Phase 0 批次 A 新增任務** — 零成本 GitHub SEO              |
 
 ---
 
@@ -115,6 +149,41 @@
 
 - [ ] 開啟 detail modal 後 screen reader 不會每 800ms 收到通知
 - [ ] 切換眼睛/帽子/稀有度時 screen reader 播報變更（如「Rarity changed to Legendary」）
+
+#### 0.A.4 建立 root-level DESIGN.md
+
+**目標**：提供 living design system 文件，方便外部閱讀者（貢獻者、設計參考者）理解 BuddyDex 設計決策。
+
+**規格**：
+
+- 於 repo 根目錄新建 `DESIGN.md`
+- 內容衍生自 `docs/plans/2026-04-02-buddydex-design.md`，但定位為 **current state**（非歷史紀錄）
+- Sections：Colors、Typography、Spacing、Rarity Visual Treatments、Motion、Accessibility Principles、Decisions Log
+- Decisions Log table：`date / decision / rationale` 三欄，列出 v1.0 → v1.4 的重要決策
+- 不刪除原 `docs/plans/2026-04-02-buddydex-design.md`（保留為歷史）
+
+**驗收條件**：
+
+- [ ] `DESIGN.md` 存在於 repo root
+- [ ] 內容涵蓋 v1.4 現狀，與 `index.html`/`styles.css` 一致
+- [ ] Decisions Log 至少列出 5 個關鍵決策（配色、字體、rarity color mapping、ASCII 同人重繪、i18n 架構）
+- [ ] README 加上指向 DESIGN.md 的連結
+
+#### 0.A.5 GitHub repo topics + 元資料
+
+**目標**：零成本 GitHub SEO，提升 repo 被發現的機會。
+
+**規格**：
+
+- 執行 `gh repo edit clementtang/buddydex --add-topic <topic>`
+- Topics：`claude-code`、`claude-buddy`、`ascii-art`、`pokedex`、`encyclopedia`、`field-guide`、`static-site`、`i18n`、`accessibility`
+- 同時檢查 repo description、homepage URL 是否正確
+
+**驗收條件**：
+
+- [ ] `gh repo view clementtang/buddydex --json repositoryTopics` 顯示上述 topics
+- [ ] Homepage 設為 `https://buddydex.chatbot.tw`
+- [ ] Description 包含「field guide」或「encyclopedia」關鍵字
 
 ### 批次 B：小批次
 
@@ -288,19 +357,89 @@ npx vercel --prod
 
 ---
 
+### Feature 4：五維 Stats 顯示系統
+
+**目標**：補上 Claude Code `/buddy` 原生的五維 stats 屬性，強化 mechanics section 的完整性。來源：`docs/research/buddyboard-analysis.md`。
+
+**使用者故事**：
+
+- 身為 Claude Code 使用者，我想知道 `/buddy` 的 stats 代表什麼、每一項的範圍。
+- 身為瀏覽者，我想在 detail modal 看到一隻 buddy 的 stats 長什麼樣子。
+
+**功能規格**：
+
+1. **Mechanics section 新增第 4 張卡片：Stats**
+   - 列出五項 stat：Debugging、Patience、Chaos、Wisdom、Snark
+   - 說明各 stat 的 0–100 範圍與 rarity 對應的 floor（common 5 / uncommon 15 / rare 25 / epic 35 / legendary 50）
+   - 簡述每項 stat 的含義（待內容撰寫，不捏造 Anthropic 官方定義）
+
+2. **Detail modal 新增 Stats 區塊**
+   - 位於 info 區（稀有度選擇器下方）
+   - 顯示一組「範例 stats」— 以選中的 rarity 為 floor、上限 100 之間隨機生成
+   - 每次切換 rarity / 物種時重新生成
+   - 以水平 bar 呈現（類似 buddyboard），等寬字體顯示數值
+   - Bar 顏色使用 rarity color
+
+3. **i18n**
+   - 新增 5 個 stat 名稱 key + 5 個描述 key + 1 個區塊標題 key
+   - 5 語系（en / zh-TW / zh-CN / ja / ko）完整翻譯
+
+**實作前置**：
+
+- **需驗證**：Stat 名稱（Debugging / Patience / Chaos / Wisdom / Snark）與範圍定義來自 buddyboard 的 README 與 DESIGN.md，**應交叉驗證 Claude Code 實際原始碼或官方文件**再實作，避免引用他人發明的命名
+- 若驗證發現名稱不同，以 Claude Code 原生定義為準
+
+**驗收條件**：
+
+- [ ] Mechanics 第 4 張卡片顯示五項 stat 與說明
+- [ ] Detail modal Stats 區塊與 rarity 切換連動
+- [ ] 5 語系正確顯示
+- [ ] 不捏造 Anthropic 官方定義（描述措辭以「社群觀察」或「範例」呈現）
+- [ ] Stat 名稱經 Claude Code 原始碼驗證
+
+**預估工時**：M（含驗證 + i18n 翻譯）
+
+---
+
 ### Phase 1 附帶修正
 
-| 項目                                           | 來源 |
-| ---------------------------------------------- | ---- |
-| Hatch animation 可跳過（點擊 + hash 自動跳過） | m3   |
-| 三幀動畫實作（偶爾觸發 frame 2）               | M6   |
-| 行動版語言切換器改為下拉選單                   | M3   |
+| 項目                                           | 來源              |
+| ---------------------------------------------- | ----------------- |
+| Hatch animation 可跳過（點擊 + hash 自動跳過） | m3                |
+| 三幀動畫實作（偶爾觸發 frame 2）               | M6                |
+| 行動版語言切換器改為下拉選單                   | M3                |
+| H1 + meta description 強化圖鑑語意             | buddyboard 差異化 |
+| README 首段加 buddyboard.xyz 互補連結          | buddyboard 差異化 |
+
+#### SEO 差異化細節
+
+**目標**：避開 buddyboard 的 SEO 陣地（"leaderboard / trading cards / competitive"），強化 BuddyDex 的「圖鑑 / 參考 / 百科」語意。
+
+**規格**：
+
+- `index.html` H1：現行「BuddyDex」維持，但 subtitle/tagline 改為強調 "field guide" / "encyclopedia" / "圖鑑"
+- `<meta name="description">`：明確包含 "field guide to Claude Code buddies"、"encyclopedia"、"圖鑑" 等字眼
+- `<meta property="og:description">`：同步
+- `<meta property="og:title">`：包含 "field guide" 或 "encyclopedia"
+- 避開字眼：`leaderboard`、`trading cards`、`competitive`、`ranking`
+
+#### buddyboard 互補連結細節
+
+**目標**：長期 SEO 互惠，同時向使用者揭露「想玩 leaderboard 的人應該去哪裡」，展現 BuddyDex 定位清晰。
+
+**規格**：
+
+- `README.md` 首段（Overview 之後、Tech 之前）加一段：
+  > **Looking for a leaderboard instead?** Check out [buddyboard.xyz](https://buddyboard.xyz) — a competitive leaderboard and shareable trading cards for Claude Code `/buddy` companions. BuddyDex focuses on browsing and content depth; Buddy Board focuses on social submission and ranking.
+- 網站 footer 新增 "Related projects" 區塊，放 buddyboard.xyz 連結
+- **不要** 使用 `rel="nofollow"`，允許 SEO 權重傳遞
+- **不要** 發送 PR 或主動求連結，僅單向友善揭露
 
 ---
 
 ## Phase 1 Done 定義
 
-Phase 1 完成 = Feature 1（分享）+ Feature 2（隨機探索）已上線。Feature 3（教學指南）和附帶修正為加分項。
+Phase 1 完成 = Feature 1（分享）+ Feature 2（隨機探索）已上線。Feature 3（教學指南）、Feature 4（Stats）和附帶修正為加分項。
 
 上線後用 GA4 觀察 7 天：
 
@@ -312,8 +451,16 @@ Phase 1 完成 = Feature 1（分享）+ Feature 2（隨機探索）已上線。F
 
 ## Phase 2 Backlog（待 GA4 數據驗證後決定）
 
-| 功能                  | 條件                                              |
-| --------------------- | ------------------------------------------------- |
-| 搜尋與篩選            | 物種數量增加，或 GA4 顯示使用者在 grid 上大量滾動 |
-| 卡片全息光效          | 分享功能上線後，需要更強的視覺吸引力              |
-| 收藏追蹤 + 抽卡模擬器 | Phase 1 數據顯示使用者有回訪意願                  |
+| 功能                        | 條件                                              |
+| --------------------------- | ------------------------------------------------- |
+| 搜尋與篩選                  | 物種數量增加，或 GA4 顯示使用者在 grid 上大量滾動 |
+| 卡片全息光效                | 分享功能上線後，需要更強的視覺吸引力              |
+| Per-species 動態 OG image   | Phase 1 分享數據顯示流量可觀                      |
+| Mulberry32 algorithm 文件頁 | 將 BuddyDex 定位為 canonical reference            |
+| 收藏追蹤 + 抽卡模擬器       | Phase 1 數據顯示使用者有回訪意願                  |
+
+### 實作參考
+
+- **全息光效**：buddyboard 的 `DESIGN.md` 有具體 CSS 實作（`::before` scanline overlay + `::after` rainbow gradient sweep + `box-shadow` pulse glow）。Phase 2 實作時可作為起點，但需重寫成 BuddyDex 的 design token 系統
+- **Per-species OG image**：若走動態路線需 `@vercel/og`（Satori），會打破純靜態承諾；替代方案為預先生成 18 張 PNG 存 repo
+- **Mulberry32 文件**：需讀 Claude Code 原始碼確認 PRNG 實作、seed 來源、species/rarity/stats roll 邏輯。產出為一頁文件（非互動工具），放 `docs/reference/buddy-algorithm.md`
