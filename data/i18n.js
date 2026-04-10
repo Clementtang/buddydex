@@ -142,6 +142,8 @@ export const TRANSLATIONS = {
       shiny: "Shiny",
       eyes: "Eyes",
       hats: "Hats",
+      on: "On",
+      off: "Off",
     },
     hatch: {
       hatching: "> Hatching...",
@@ -286,6 +288,8 @@ export const TRANSLATIONS = {
       shiny: "閃光",
       eyes: "眼睛",
       hats: "帽子",
+      on: "開",
+      off: "關",
     },
     hatch: {
       hatching: "> 孵化中...",
@@ -435,6 +439,8 @@ export const TRANSLATIONS = {
       shiny: "シャイニー",
       eyes: "目",
       hats: "帽子",
+      on: "オン",
+      off: "オフ",
     },
     hatch: {
       hatching: "> ふ化中...",
@@ -592,6 +598,8 @@ export const TRANSLATIONS = {
       shiny: "샤이니",
       eyes: "눈",
       hats: "모자",
+      on: "켜짐",
+      off: "꺼짐",
     },
     hatch: {
       hatching: "> 부화 중...",
@@ -736,6 +744,8 @@ export const TRANSLATIONS = {
       shiny: "闪光",
       eyes: "眼睛",
       hats: "帽子",
+      on: "开",
+      off: "关",
     },
     hatch: {
       hatching: "> 孵化中...",

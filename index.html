@@ -104,6 +104,14 @@
         <div class="detail-info" id="detail-info">
           <!-- JS populates detail content here -->
         </div>
+        <!-- Screen reader announcer — only updated on user-initiated accessory
+             changes, never on the 800ms animation loop (0.A.3). -->
+        <div
+          id="detail-announce"
+          class="sr-only"
+          aria-live="polite"
+          aria-atomic="true"
+        ></div>
       </div>
     </div>
 

@@ -30,6 +30,18 @@ function unlockBodyScroll() {
   window.scrollTo(0, scrollY);
 }
 
+// Writes a one-off message to the detail modal's aria-live region.
+// Only called from user-initiated accessory changes — never from the
+// 800ms animation loop (0.A.3 fix).
+function announce(message) {
+  const el = document.getElementById("detail-announce");
+  if (!el) return;
+  // Clearing first forces some screen readers to re-read the same text
+  // when the user toggles back to a previous value.
+  el.textContent = "";
+  el.textContent = message;
+}
+
 function renderAscii(species, frameIndex, eyeSymbol, hatAscii) {
   const frame = species.frames[frameIndex];
   return frame
@@ -53,6 +65,8 @@ export function setupDetailOverlay() {
   function close() {
     overlay.classList.remove("visible");
     unlockBodyScroll();
+    const announcer = document.getElementById("detail-announce");
+    if (announcer) announcer.textContent = "";
     if (animationInterval) {
       clearInterval(animationInterval);
       animationInterval = null;
@@ -135,6 +149,7 @@ export function openDetail(speciesId, detailRefs) {
             if (!available.find((h) => h.id === currentHat.id)) {
               currentHat = HATS[0];
             }
+            announce(`${t("detail.rarity")}: ${t(`rarity.${rarity.id}`)}`);
             buildControls();
             updatePreview();
           });
@@ -154,6 +169,9 @@ export function openDetail(speciesId, detailRefs) {
         checkbox.checked = isShiny;
         checkbox.addEventListener("change", () => {
           isShiny = checkbox.checked;
+          announce(
+            `${t("detail.shiny")}: ${isShiny ? t("detail.on") : t("detail.off")}`,
+          );
           updatePreview();
         });
         const slider = document.createElement("span");
@@ -179,6 +197,7 @@ export function openDetail(speciesId, detailRefs) {
           }
           button.addEventListener("click", () => {
             currentEye = eye;
+            announce(`${t("detail.eyes")}: ${t(`eyes.${eye.id}`)}`);
             buildControls();
             updatePreview();
           });
@@ -208,6 +227,7 @@ export function openDetail(speciesId, detailRefs) {
           }
           button.addEventListener("click", () => {
             currentHat = hat;
+            announce(`${t("detail.hats")}: ${t(`hats.${hat.id}`)}`);
             buildControls();
             updatePreview();
           });
@@ -228,8 +248,10 @@ export function openDetail(speciesId, detailRefs) {
     updatePreview();
   }, 800);
 
-  // aria-live on preview for screen readers
-  preview.setAttribute("aria-live", "polite");
+  // aria-label only — the preview text changes every 800ms for the idle
+  // animation; an aria-live region here would spam screen readers (0.A.3).
+  // User-initiated changes are announced via the dedicated #detail-announce
+  // element using the announce() helper.
   preview.setAttribute("aria-label", t(`species.${species.id}.name`));
 
   buildControls();
