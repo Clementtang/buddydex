@@ -15,7 +15,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # Node 20 goes EOL on 2026-04-30. Pin to Node 22 LTS
+          # (EOL 2027-04-30) to buy another year of support.
+          node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
