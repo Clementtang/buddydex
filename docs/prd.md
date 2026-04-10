@@ -1,9 +1,9 @@
 # BuddyDex Phase 0 + Phase 1 產品需求文件（PRD）
 
-> 版本：2.0
-> 日期：2026-04-09
-> 狀態：已審查（回應 `docs/devils-advocate-review.md`）
-> 依據：`docs/research/encyclopedia-benchmarks.md` + devil's advocate review
+> 版本：2.1
+> 日期：2026-04-10
+> 狀態：已審查（round 1 + round 2）
+> 依據：`docs/research/encyclopedia-benchmarks.md` + `docs/devils-advocate-review.md` + `docs/devils-advocate-review-round2.md`
 
 ---
 
@@ -42,37 +42,93 @@
 
 ---
 
-## Phase 0：技術債清理
+## Phase 0：技術債清理（分批交付）
 
-> 在 Phase 1 功能開發前完成。
+> Round 2 回饋：避免把所有任務綁在一起變成「前置作業陷阱」。
+> Phase 0 分為三個批次，批次 A + B 完成即可開始 Phase 1。
+> 批次 C（i18n 拆分）延後至 Phase 1 之後再評估。
 
-### 0.1 i18n 檔案拆分
+### 批次 A：立即交付
 
-**目標**：將 `data/i18n.js`（755 行）拆分為獨立語系檔案，支援動態載入。
+#### 0.A.1 抽離 inline GA4 script
+
+**目標**：將 `index.html` 的 inline GA4 初始化代碼抽離為獨立模組，為 CSP 鋪路。
 
 **規格**：
 
-- 拆分為 `data/i18n/en.js`、`data/i18n/zh-TW.js`、`data/i18n/zh-CN.js`、`data/i18n/ja.js`、`data/i18n/ko.js`
-- `js/i18n.js` 改用動態 `import()` 只載入當前語系
-- 語系切換時動態載入新語系檔案
+- 建立 `js/analytics.js`，包含 `window.dataLayer = ...; gtag('js', ...); gtag('config', ...)` 等初始化邏輯
+- `index.html` 改用 `<script type="module" src="js/analytics.js"></script>`
+- 外部 `gtag.js` 載入保持 `<script async src="https://www.googletagmanager.com/gtag/js?id=..."></script>`
 
 **驗收條件**：
 
-- [ ] 每個語系一個獨立檔案
-- [ ] 首次載入只下載一個語系的翻譯
-- [ ] 語系切換後正確載入新翻譯
-- [ ] 現有功能不受影響
+- [ ] `index.html` 無 inline `<script>` 標籤（除了載入 analytics.js 和 main.js）
+- [ ] DevTools Network tab 顯示 `gtag/js?id=...` 仍正常載入
+- [ ] Thufir `ga4_realtime` 可看到測試流量
 
-### 0.2 基本測試 + CI
+#### 0.A.2 套用 security headers（含 CSP）
+
+**目標**：加入基本的 HTTP 安全性 headers。**依賴 0.A.1 必須先完成**。
+
+**規格**：
+在 `vercel.json` 加入：
+
+```json
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data:;"
+        },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}
+```
+
+**驗收條件**：
+
+- [ ] Response headers 包含上述四項
+- [ ] Console 無 CSP 違規警告
+- [ ] GA4 `collect?v=2&...` 請求正常送出（Network tab 確認）
+- [ ] Thufir `ga4_realtime` 顯示即時數據正常
+- [ ] Google Fonts 正常載入
+
+#### 0.A.3 修正 aria-live 過度觸發
+
+**目標**：修正 detail modal 的 aria-live 每 800ms 過度觸發問題。
+
+**規格**：
+
+- `aria-live` 屬性從 preview 元素移除
+- 動畫循環不觸發 aria-live
+- 新增獨立的 visually-hidden 元素（`<div aria-live="polite" class="sr-only" id="detail-announce"></div>`）
+- 僅在使用者主動切換配件（眼睛、帽子、稀有度、shiny）時更新 announce 元素文字
+
+**驗收條件**：
+
+- [ ] 開啟 detail modal 後 screen reader 不會每 800ms 收到通知
+- [ ] 切換眼睛/帽子/稀有度時 screen reader 播報變更（如「Rarity changed to Legendary」）
+
+### 批次 B：小批次
+
+#### 0.B.1 測試基礎建設 + CI
 
 **目標**：建立最小可行的測試基礎建設。
 
 **規格**：
 
-- 建立 `package.json`，加入 Vitest
-- 測試 `data/accessories.js`（`getAvailableHats` 邏輯）
-- 測試 `js/i18n.js`（`t()` fallback 邏輯）
-- GitHub Actions：push to main 時跑 `npm test`
+- 建立 `package.json`，加入 Vitest 作為 devDependency
+- 單元測試：`data/accessories.js` 的 `getAvailableHats()`
+- 單元測試：`js/i18n.js` 的 `t()` fallback 邏輯（當前語系缺 key 時回退到 en）
+- 若 Phase 1 Feature 1 已實作，加入 hash validation 的測試案例
+- GitHub Actions workflow：push to main 時跑 `npm test`
 
 **驗收條件**：
 
@@ -80,44 +136,16 @@
 - [ ] GitHub Actions 綠燈
 - [ ] 至少覆蓋 `getAvailableHats` 和 `t()` 函式
 
-### 0.3 安全性 headers
+### 批次 C：延後
 
-**目標**：加入基本的 HTTP 安全性 headers。
+#### 0.C.1 ~~i18n 檔案拆分~~（移至 Phase 1 之後評估）
 
-**規格**：
-在 `vercel.json` 加入：
+**延後原因**：
 
-- `Content-Security-Policy`：限制 `script-src` 為 `self` + `googletagmanager.com`
-- `X-Content-Type-Options: nosniff`
-- `X-Frame-Options: DENY`
-- `Referrer-Policy: strict-origin-when-cross-origin`
-
-**驗收條件**：
-
-- [ ] Response headers 包含上述四項
-- [ ] GA4 正常運作（不被 CSP 阻擋）
-- [ ] Google Fonts 正常載入
-
-### 0.4 aria-live 修正
-
-**目標**：修正 detail modal 的 aria-live 每 800ms 過度觸發問題。
-
-**規格**：
-
-- 動畫循環不觸發 aria-live
-- 僅在使用者主動切換配件時播報
-- 使用獨立的 visually-hidden 元素播報狀態變更
-
-**驗收條件**：
-
-- [ ] 開啟 detail modal 後 screen reader 不會每 800ms 收到通知
-- [ ] 切換眼睛/帽子/稀有度時 screen reader 播報變更
-
-### 0.5 文件修正
-
-- CHANGELOG 補上版本比較連結（m2）
-- 設計文件加註被省略的設計決策（m8）
-- README 加註 fork 使用者替換 GA ID（m1）
+- Feature 3（教學指南）預估新增翻譯 key < 30 個，現有檔案從 755 → ~850 行，仍可接受
+- 拆分涉及動態 `import()`，會牽動 `t()` 同步/非同步行為、rerender 時機、語系切換 loading state
+- 拆分工時 L，風險高，急迫性不足以阻擋 Phase 1 開始
+- 重新評估時機：Phase 1 完成後，若 i18n 檔案超過 1000 行或維護成本顯著上升再處理
 
 ---
 
@@ -138,16 +166,31 @@
 
 **前置作業**：
 
-- 製作 1200x630 OG image（m7，分享連結需要預覽圖）
+- 製作通用 OG image（詳見下方 OG image 規格）
+
+**OG image 規格**：
+
+- 尺寸：1200x630 pixels
+- 格式：PNG
+- 檔名：`og-image.png`（放在 repo 根目錄）
+- 設計內容：深色背景（`#0d0d0d`）+ BuddyDex logo（Claude 橘色 `#da7756`）+ 標語「A field guide to Claude Buddies」+ 3-4 隻代表性 buddy ASCII art（建議 Duck、Cat、Dragon、Capybara 各一，展示不同類型）
+- 製作方式：以 HTML/CSS 寫 1200x630 的單頁（參考既有 design tokens），用 Playwright 或 Puppeteer 截圖；或直接用 Figma 手動設計後匯出
+- Per-species 動態 OG image：**不納入 Phase 1**，若 Phase 1 數據顯示分享流量可觀再做（需要 `@vercel/og` 或預先生成 18 張）
 
 **功能規格**：
 
-1. **URL hash 路由**
+1. **URL hash 路由（含 hash validation）**
    - `buddydex.chatbot.tw/#duck` 自動打開 Duck 的 detail modal
    - 開啟 detail modal 時更新 URL hash
    - 關閉 modal 時清除 hash
-   - 瀏覽器前進/後退支援
+   - 瀏覽器前進/後退支援（使用 `hashchange` 事件）
    - URL 包含 hash 時自動跳過 hatch animation（m3）
+   - **安全性規則（R2-M1）**：
+     - `window.location.hash` 視為**不受信任的輸入**
+     - 從 hash 讀取的 species id 必須用 allowlist 驗證：`SPECIES.find(s => s.id === hashValue)`
+     - 驗證失敗時：清除 hash（`history.replaceState(null, '', location.pathname)`）、不開啟 modal、console.warn 記錄
+     - 任何從 hash 衍生的字串**不得直接進入 `innerHTML`**，一律使用 `textContent` 或 DOM API
+     - 在 Phase 0 批次 B 的測試中加入惡意 hash 測試案例：`#<script>alert(1)</script>`、`#duck"><img src=x>`、`#'; alert(1); //`、`#../../etc/passwd`
 
 2. **複製連結按鈕**
    - detail modal 內，物種名稱旁
@@ -160,14 +203,34 @@
 **驗收條件**：
 
 - [ ] `#duck` URL 開啟 Duck detail modal
+- [ ] `#<script>` 等惡意 hash 不會執行任何 JS，不顯示錯誤給使用者，console 有 warning
+- [ ] 不存在的 species id（如 `#nosuchbuddy`）被拒絕
 - [ ] URL 帶 hash 時跳過 hatch animation
 - [ ] 瀏覽器返回鍵關閉 modal
 - [ ] 複製連結正確複製 URL 並顯示回饋
 - [ ] Web Share API 在支援的行動裝置上觸發
-- [ ] OG image 在社群平台分享時正確顯示
+- [ ] OG image 在社群平台分享時正確顯示（Twitter、Facebook、LINE 各測一次）
 - [ ] Chrome DevTools mobile emulation（iPhone SE, Pixel 5）驗收通過
 
-**預估工時**：S
+**回滾條件（R2-m3 簡化版）**：
+
+部署後立即執行以下檢查，任一項失敗就回滾：
+
+- [ ] 線上站以 `buddydex.chatbot.tw/#duck`、`#cat`、`#dragon`、`#capybara`、`#ghost` 逐一開啟，確認 detail modal 正常
+- [ ] Chrome DevTools Console 無 JS 錯誤、無 CSP 違規
+- [ ] Thufir `ga4_realtime` 顯示即時數據非 0（自行測試的流量）
+
+**回滾操作**：
+
+```bash
+git revert <commit-sha>
+git push
+npx vercel --prod
+```
+
+不修改 branch history，保留 revert 紀錄。
+
+**預估工時**：S（不含 OG image 製作，OG image 另計 S）
 
 ---
 
