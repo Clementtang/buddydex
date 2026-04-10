@@ -2,6 +2,8 @@
 
 > 回應日期：2026-04-09
 > 對應審查：`docs/devils-advocate-review.md`
+> **注意**：本文件中提到的「Feature 1~4」為 PRD v1.0 的編號，與現行 PRD v2.0 的編號不同。對應關係：v1 Feature 1（搜尋）已移除；v1 Feature 2（分享）= v2 Feature 1；v1 Feature 3（教學指南）= v2 Feature 3；v1 Feature 4（隨機探索）= v2 Feature 2。以 PRD v2.0 為準。
+> Round 2 回應見 `docs/devils-advocate-response-round2.md`。
 
 ---
 
