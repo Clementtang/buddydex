@@ -1,0 +1,20 @@
+{
+  "name": "buddydex",
+  "version": "1.4.0",
+  "private": true,
+  "type": "module",
+  "description": "Fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet companions in Claude Code.",
+  "homepage": "https://buddydex.chatbot.tw",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Clementtang/buddydex.git"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}
