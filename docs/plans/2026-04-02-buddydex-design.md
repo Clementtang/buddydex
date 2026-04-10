@@ -1,7 +1,7 @@
 # BuddyDex Design [COMPLETED]
 
 > Status: Completed and deployed as v1.0.0 on 2026-04-02.
-> All design decisions in this document have been implemented. Subsequent changes (i18n, a11y, SEO) are tracked in CHANGELOG.md.
+> Most design decisions have been implemented. Items marked with ~~strikethrough~~ were omitted during implementation — see inline notes for reasons. Subsequent changes (i18n, a11y, SEO) are tracked in CHANGELOG.md.
 
 ## Overview
 
