@@ -1,9 +1,9 @@
 # BuddyDex Phase 0 + Phase 1 產品需求文件（PRD）
 
-> 版本：2.3
+> 版本：2.4
 > 日期：2026-04-10
-> 狀態：已審查（round 1 + round 2 + round 3）+ 競品分析（buddyboard.xyz）
-> 依據：`docs/research/encyclopedia-benchmarks.md` + `docs/research/buddyboard-analysis.md` + `docs/devils-advocate-review.md` + `docs/devils-advocate-review-round2.md` + `docs/devils-advocate-review-round3.md`
+> 狀態：已審查（round 1 + round 2 + round 3 + round 4）+ 競品分析（buddyboard.xyz）+ Phase 0 Batch A/B 上線驗證通過
+> 依據：`docs/research/encyclopedia-benchmarks.md` + `docs/research/buddyboard-analysis.md` + `docs/devils-advocate-review.md` + `docs/devils-advocate-review-round2.md` + `docs/devils-advocate-review-round3.md` + `docs/devils-advocate-review-round4.md`
 
 ---
 
@@ -239,10 +239,23 @@
 
 3. **實作前檢查**：`grep -n "\.style\." js/` 確認沒有其他 inline style 寫入點。若有，一併重構或在 PRD 建新子任務
 
+4. **額外重構（實作中發現，記錄於 R4-m1）**：`js/render-detail.js` 的 body scroll lock 也在寫 inline style（`body.style.position / .top / .width`），同樣會觸發 CSP `style-src 'unsafe-inline'` 需求。改用 constructable `CSSStyleSheet` + `document.adoptedStyleSheets` 動態注入 `body.scroll-locked { top: -${scrollY}px; }`。`detail-controls.css` 補上靜態部分：
+
+   ```css
+   body.scroll-locked {
+     position: fixed;
+     width: 100%;
+   }
+   ```
+
+   **瀏覽器相容性（R4-C1）**：`new CSSStyleSheet()` 需要 Chrome 73+ / Firefox 101+ / **Safari 16.4+ / iOS 16.4+**。舊 Safari 會 throw，若不 feature-detect 會讓整個 `render-detail.js` 模組 import 失敗，造成站內所有 JS 初始化中斷。**必須** 用 try/catch 包覆 module 頂層的 `new CSSStyleSheet()`，失敗時 `scrollLockSheet = null`，`lockBodyScroll()` / `unlockBodyScroll()` 透過 null-check 跳過 `replaceSync`。舊瀏覽器會有 modal 開啟時一瞬 scroll jump 的 UX 瑕疵（`position: fixed` 無動態 top offset），但站仍可使用。
+
 **驗收條件**：
 
-- [ ] `grep -n "\.style\." js/` 無 rarity-related 的 inline style 寫入
+- [ ] `grep -n "\.style\." js/` 無 rarity-related 或 scroll-lock 的 inline style 寫入
 - [ ] Detail modal 切換 rarity 時按鈕顏色正確顯示（視覺上與重構前相同）
+- [ ] Scroll lock 正常運作（modal 開啟不 scroll jump，關閉時 scroll 位置恢復）於支援的瀏覽器
+- [ ] 在 `new CSSStyleSheet` throw 的環境（Safari 15 模擬 或 `Object.defineProperty(window, 'CSSStyleSheet', { get() { throw Error(); } })`）下，`render-detail.js` 仍能 import 成功，卡片點擊仍能開啟 modal
 - [ ] 重構後 0.A.2 CSP 可以不用 `'unsafe-inline'` 並通過驗收
 
 ### 批次 B：小批次
@@ -331,7 +344,7 @@
    - 關閉 modal 時清除 hash
    - 瀏覽器前進/後退支援（使用 `hashchange` 事件）
    - URL 包含 hash 時自動跳過 hatch animation（m3）
-   - **安全性規則（R2-M1 + R3-m4 + R3-m5）**：
+   - **安全性規則（R2-M1 + R3-m4 + R3-m5 + R4-m2）**：
      - `window.location.hash` 視為**不受信任的輸入**
      - 讀取順序：`location.hash` 去掉前綴 `#` → `decodeURIComponent()` → allowlist 比對
      - **decode 失敗**（如 `decodeURIComponent('%E0%A4%A')` 會 throw `URIError`）視同驗證失敗，不開啟 modal（R3-m5）
@@ -339,6 +352,47 @@
      - 驗證失敗時：清除 hash 同時**保留 query string**，用 `history.replaceState(null, '', location.pathname + location.search)`，避免誤清 UTM 參數（R3-m4）。後續不開啟 modal、`console.warn` 記錄
      - 任何從 hash 衍生的字串**不得直接進入 `innerHTML`**，一律使用 `textContent` 或 DOM API
      - Feature 1 實作時須包含惡意 hash 測試案例（併入 Vitest）：`#<script>alert(1)</script>`、`#duck"><img src=x>`、`#'; alert(1); //`、`#../../etc/passwd`、`#%3Cscript%3E`（percent-encoded `<script>`）、`#%E0%A4%A`（malformed percent sequence，預期 `URIError`）
+
+   **參考實作（R4-m2，實作者直接複製可，但須對應命名規範）**：
+
+   ```js
+   import { SPECIES } from "../data/species.js";
+
+   /**
+    * Validate and decode a URL hash, returning the matched species id
+    * or `null` if the hash is missing, malformed, or unknown.
+    * Never throws — all error paths console.warn and return null.
+    */
+   export function parseHashSpecies(hashValue = window.location.hash) {
+     const raw = hashValue.startsWith("#") ? hashValue.slice(1) : hashValue;
+     if (!raw) return null;
+
+     let decoded;
+     try {
+       decoded = decodeURIComponent(raw);
+     } catch {
+       // Malformed percent-encoding (e.g. '%E0%A4%A')
+       console.warn("[buddydex] invalid hash encoding, ignoring");
+       return null;
+     }
+
+     const matched = SPECIES.find((s) => s.id === decoded);
+     if (!matched) {
+       console.warn("[buddydex] unknown species id in hash:", decoded);
+       return null;
+     }
+     return matched.id;
+   }
+
+   // Caller usage at boot:
+   const speciesId = parseHashSpecies();
+   if (speciesId) {
+     openDetail(speciesId, detailRefs);
+   } else if (window.location.hash) {
+     // Invalid hash present — clear it but preserve the query string
+     history.replaceState(null, "", location.pathname + location.search);
+   }
+   ```
 
 2. **複製連結按鈕**
    - detail modal 內，物種名稱旁
