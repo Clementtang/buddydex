@@ -8,17 +8,34 @@ const DEFAULT_RARITY = RARITIES[0];
 
 let animationInterval = null;
 
-// Constructable stylesheet used to inject the dynamic `top` offset for the
-// body scroll lock. Writing JS inline styles (body.style.top = ...) would
-// require CSP `style-src 'unsafe-inline'`; mutating an adopted stylesheet
-// does not. See docs/prd.md Phase 0 task 0.A.6.
-const scrollLockSheet = new CSSStyleSheet();
-document.adoptedStyleSheets = [...document.adoptedStyleSheets, scrollLockSheet];
+// Constructable stylesheet used to inject the dynamic `top` offset for
+// the body scroll lock. Writing JS inline styles (body.style.top = ...)
+// would require CSP `style-src 'unsafe-inline'`; mutating an adopted
+// stylesheet does not. See docs/prd.md Phase 0 task 0.A.6.
+//
+// Feature-detected to keep this module loadable on Safari < 16.4 /
+// iOS < 16.4 where `new CSSStyleSheet()` throws. On those browsers we
+// fall back to the static `body.scroll-locked { position: fixed;
+// width: 100%; }` rule in detail-controls.css, which keeps the site
+// usable at the cost of a one-frame scroll jump on modal open/close.
+// See docs/devils-advocate-review-round4.md R4-C1.
+let scrollLockSheet = null;
+try {
+  scrollLockSheet = new CSSStyleSheet();
+  document.adoptedStyleSheets = [
+    ...document.adoptedStyleSheets,
+    scrollLockSheet,
+  ];
+} catch {
+  // Older browser — graceful fallback, see block comment above.
+}
 
 function lockBodyScroll() {
   const scrollY = window.scrollY;
-  scrollLockSheet.replaceSync(`body.scroll-locked { top: -${scrollY}px; }`);
   document.body.dataset.scrollY = String(scrollY);
+  if (scrollLockSheet) {
+    scrollLockSheet.replaceSync(`body.scroll-locked { top: -${scrollY}px; }`);
+  }
   document.body.classList.add("scroll-locked");
 }
 
@@ -26,7 +43,9 @@ function unlockBodyScroll() {
   const scrollY = parseInt(document.body.dataset.scrollY || "0", 10);
   document.body.classList.remove("scroll-locked");
   delete document.body.dataset.scrollY;
-  scrollLockSheet.replaceSync("");
+  if (scrollLockSheet) {
+    scrollLockSheet.replaceSync("");
+  }
   window.scrollTo(0, scrollY);
 }
 
