@@ -15,3 +15,9 @@ function gtag() {
 
 gtag("js", new Date());
 gtag("config", GA_MEASUREMENT_ID);
+
+// Expose gtag on window so callers outside this module (e.g., Phase 1
+// Feature 1 share event tracking) can use the same canonical gtag()
+// API without each caller having to re-derive it from dataLayer.
+// See docs/devils-advocate-review-round4.md R4-M1.
+window.gtag = gtag;
