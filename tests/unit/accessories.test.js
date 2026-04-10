@@ -41,10 +41,17 @@ describe("getAvailableHats", () => {
     expect(hats.map((h) => h.id)).toContain("tinyduck");
   });
 
-  it("returns empty array for unknown rarity", () => {
-    // RARITY_ORDER.indexOf returns -1, filter keeps nothing except hats
-    // whose minRarity also has index -1, but every defined hat has a
-    // valid minRarity, so the result should be empty.
+  // Deliberate silent-failure contract (R5-M2): unknown rarity ids
+  // return [] rather than throwing. Callers must validate their
+  // rarity input BEFORE calling getAvailableHats — we never accept
+  // unknown rarity as a user-facing signal. Phase 1 Feature 1 hash
+  // routing and any future URL/localStorage-sourced rarity must go
+  // through an allowlist (see data/rarity.js) before this function
+  // is called. Do NOT tighten this test to rely on the empty array
+  // as a validation mechanism.
+  it("silently returns [] for unknown rarity (caller must pre-validate)", () => {
     expect(getAvailableHats("mythic")).toEqual([]);
+    expect(getAvailableHats("")).toEqual([]);
+    expect(getAvailableHats(undefined)).toEqual([]);
   });
 });
