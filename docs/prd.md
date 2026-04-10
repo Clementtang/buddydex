@@ -1,9 +1,9 @@
 # BuddyDex Phase 0 + Phase 1 產品需求文件（PRD）
 
-> 版本：2.2
+> 版本：2.3
 > 日期：2026-04-10
-> 狀態：已審查（round 1 + round 2）+ 競品分析（buddyboard.xyz）
-> 依據：`docs/research/encyclopedia-benchmarks.md` + `docs/research/buddyboard-analysis.md` + `docs/devils-advocate-review.md` + `docs/devils-advocate-review-round2.md`
+> 狀態：已審查（round 1 + round 2 + round 3）+ 競品分析（buddyboard.xyz）
+> 依據：`docs/research/encyclopedia-benchmarks.md` + `docs/research/buddyboard-analysis.md` + `docs/devils-advocate-review.md` + `docs/devils-advocate-review-round2.md` + `docs/devils-advocate-review-round3.md`
 
 ---
 
@@ -102,7 +102,7 @@
 
 #### 0.A.2 套用 security headers（含 CSP）
 
-**目標**：加入基本的 HTTP 安全性 headers。**依賴 0.A.1 必須先完成**。
+**目標**：加入基本的 HTTP 安全性 headers，不依賴 `'unsafe-inline'`。**依賴 0.A.1 和 0.A.6 必須先完成**（0.A.6 移除 inline style，讓 CSP 可以不用 `'unsafe-inline'`）。
 
 **規格**：
 在 `vercel.json` 加入：
@@ -115,7 +115,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data:;"
+          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; base-uri 'self'; form-action 'self'; frame-ancestors 'none';"
         },
         { "key": "X-Content-Type-Options", "value": "nosniff" },
         { "key": "X-Frame-Options", "value": "DENY" },
@@ -126,13 +126,22 @@
 }
 ```
 
+**Round 3 強化說明**：
+
+- **移除 `style-src 'unsafe-inline'`**（R3-M2）：依賴 0.A.6 將 `js/render-detail.js` 的 `element.style.x = y` 重構為 data attribute + CSS class。實作前用 `grep -n "\.style\." js/` 再次確認無其他 inline style 寫入點
+- **`font-src 'self' https://fonts.gstatic.com`**（R3-m3）：預留 self-hosted 字體空間，零成本防呆
+- **`base-uri 'self'`**（R3-m2）：防 `<base>` tag 注入攻擊
+- **`form-action 'self'`**（R3-m2）：限制 form 提交目的地（目前無 form，但 defense in depth）
+- **`frame-ancestors 'none'`**（R3-m2）：現代標準，與 `X-Frame-Options: DENY` 雙層防護（部分瀏覽器忽略 XFO）
+
 **驗收條件**：
 
 - [ ] Response headers 包含上述四項
-- [ ] Console 無 CSP 違規警告
+- [ ] Console 無 CSP 違規警告（特別確認切換 rarity 時 rarity button 的樣式仍正確，代表 0.A.6 的重構有效）
 - [ ] GA4 `collect?v=2&...` 請求正常送出（Network tab 確認）
 - [ ] Thufir `ga4_realtime` 顯示即時數據正常
 - [ ] Google Fonts 正常載入
+- [ ] CSP header 中**不包含**任何 `'unsafe-inline'`
 
 #### 0.A.3 修正 aria-live 過度觸發
 
@@ -185,6 +194,57 @@
 - [ ] Homepage 設為 `https://buddydex.chatbot.tw`
 - [ ] Description 包含「field guide」或「encyclopedia」關鍵字
 
+#### 0.A.6 Rarity 按鈕 inline style 重構為 data attribute
+
+**目標**：將 `js/render-detail.js` 的 rarity button 樣式從 inline style（`element.style.borderColor = ...`）改為 CSS data attribute + class，為 0.A.2 移除 CSP `style-src 'unsafe-inline'` 鋪路（R3-M2）。**block 0.A.2**。
+
+**規格**：
+
+1. **`js/render-detail.js`**：
+   - 找到現有寫入 rarity color 的位置（約 line 111–112）
+     ```js
+     button.style.borderColor = rarity.color;
+     button.style.color = rarity.color;
+     ```
+   - 改為：
+     ```js
+     button.classList.add("rarity-btn");
+     button.dataset.rarity = rarity.id; // common / uncommon / rare / epic / legendary
+     ```
+
+2. **`css/components.css`**（或 `css/detail-controls.css`，視既有位置）新增：
+
+   ```css
+   .rarity-btn[data-rarity="common"] {
+     color: var(--rarity-common);
+     border-color: var(--rarity-common);
+   }
+   .rarity-btn[data-rarity="uncommon"] {
+     color: var(--rarity-uncommon);
+     border-color: var(--rarity-uncommon);
+   }
+   .rarity-btn[data-rarity="rare"] {
+     color: var(--rarity-rare);
+     border-color: var(--rarity-rare);
+   }
+   .rarity-btn[data-rarity="epic"] {
+     color: var(--rarity-epic);
+     border-color: var(--rarity-epic);
+   }
+   .rarity-btn[data-rarity="legendary"] {
+     color: var(--rarity-legendary);
+     border-color: var(--rarity-legendary);
+   }
+   ```
+
+3. **實作前檢查**：`grep -n "\.style\." js/` 確認沒有其他 inline style 寫入點。若有，一併重構或在 PRD 建新子任務
+
+**驗收條件**：
+
+- [ ] `grep -n "\.style\." js/` 無 rarity-related 的 inline style 寫入
+- [ ] Detail modal 切換 rarity 時按鈕顏色正確顯示（視覺上與重構前相同）
+- [ ] 重構後 0.A.2 CSP 可以不用 `'unsafe-inline'` 並通過驗收
+
 ### 批次 B：小批次
 
 #### 0.B.1 測試基礎建設 + CI
@@ -196,8 +256,9 @@
 - 建立 `package.json`，加入 Vitest 作為 devDependency
 - 單元測試：`data/accessories.js` 的 `getAvailableHats()`
 - 單元測試：`js/i18n.js` 的 `t()` fallback 邏輯（當前語系缺 key 時回退到 en）
-- 若 Phase 1 Feature 1 已實作，加入 hash validation 的測試案例
 - GitHub Actions workflow：push to main 時跑 `npm test`
+
+> **R3-m1 澄清**：批次 B 的範圍僅限 `getAvailableHats()` + `t()` 兩項，不包含 hash validation 測試。hash validation 測試屬於 Feature 1 的一部分，應於 Feature 1 實作時與程式碼一起加入（包含 Round 2 R2-M1 列出的惡意 hash 測試案例：`#<script>alert(1)</script>`、`#duck"><img src=x>`、`#'; alert(1); //`、`#../../etc/passwd` 以及 Round 3 R3-m5 的 decode 失敗測試）。Feature 1 完成後 `npm test` 應包含並通過這些案例
 
 **驗收條件**：
 
@@ -235,7 +296,8 @@
 
 **前置作業**：
 
-- 製作通用 OG image（詳見下方 OG image 規格）
+1. 製作通用 OG image（詳見下方 OG image 規格）
+2. 在 `index.html` `<head>` 加入 og:image 相關 meta tags（R3-M3）— 沒有這步，即使 og-image.png 放在 repo 根目錄社群平台也不會顯示預覽
 
 **OG image 規格**：
 
@@ -246,6 +308,21 @@
 - 製作方式：以 HTML/CSS 寫 1200x630 的單頁（參考既有 design tokens），用 Playwright 或 Puppeteer 截圖；或直接用 Figma 手動設計後匯出
 - Per-species 動態 OG image：**不納入 Phase 1**，若 Phase 1 數據顯示分享流量可觀再做（需要 `@vercel/og` 或預先生成 18 張）
 
+**OG image meta tags 規格**（R3-M3）：
+
+在 `index.html` 的 `<head>` 加入：
+
+```html
+<meta property="og:image" content="https://buddydex.chatbot.tw/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta
+  property="og:image:alt"
+  content="BuddyDex — A field guide to Claude Buddies"
+/>
+<meta name="twitter:image" content="https://buddydex.chatbot.tw/og-image.png" />
+```
+
 **功能規格**：
 
 1. **URL hash 路由（含 hash validation）**
@@ -254,12 +331,14 @@
    - 關閉 modal 時清除 hash
    - 瀏覽器前進/後退支援（使用 `hashchange` 事件）
    - URL 包含 hash 時自動跳過 hatch animation（m3）
-   - **安全性規則（R2-M1）**：
+   - **安全性規則（R2-M1 + R3-m4 + R3-m5）**：
      - `window.location.hash` 視為**不受信任的輸入**
-     - 從 hash 讀取的 species id 必須用 allowlist 驗證：`SPECIES.find(s => s.id === hashValue)`
-     - 驗證失敗時：清除 hash（`history.replaceState(null, '', location.pathname)`）、不開啟 modal、console.warn 記錄
+     - 讀取順序：`location.hash` 去掉前綴 `#` → `decodeURIComponent()` → allowlist 比對
+     - **decode 失敗**（如 `decodeURIComponent('%E0%A4%A')` 會 throw `URIError`）視同驗證失敗，不開啟 modal（R3-m5）
+     - allowlist 驗證：`SPECIES.find(s => s.id === decodedValue)`
+     - 驗證失敗時：清除 hash 同時**保留 query string**，用 `history.replaceState(null, '', location.pathname + location.search)`，避免誤清 UTM 參數（R3-m4）。後續不開啟 modal、`console.warn` 記錄
      - 任何從 hash 衍生的字串**不得直接進入 `innerHTML`**，一律使用 `textContent` 或 DOM API
-     - 在 Phase 0 批次 B 的測試中加入惡意 hash 測試案例：`#<script>alert(1)</script>`、`#duck"><img src=x>`、`#'; alert(1); //`、`#../../etc/passwd`
+     - Feature 1 實作時須包含惡意 hash 測試案例（併入 Vitest）：`#<script>alert(1)</script>`、`#duck"><img src=x>`、`#'; alert(1); //`、`#../../etc/passwd`、`#%3Cscript%3E`（percent-encoded `<script>`）、`#%E0%A4%A`（malformed percent sequence，預期 `URIError`）
 
 2. **複製連結按鈕**
    - detail modal 內，物種名稱旁
@@ -273,12 +352,15 @@
 
 - [ ] `#duck` URL 開啟 Duck detail modal
 - [ ] `#<script>` 等惡意 hash 不會執行任何 JS，不顯示錯誤給使用者，console 有 warning
+- [ ] `#%E0%A4%A`（malformed percent sequence）觸發 `URIError` 並被 try/catch 接住，不開啟 modal（R3-m5）
+- [ ] 從 `/?utm_source=twitter#malicious` 進入時，hash 被清除但 `?utm_source=twitter` 保留（R3-m4）
 - [ ] 不存在的 species id（如 `#nosuchbuddy`）被拒絕
 - [ ] URL 帶 hash 時跳過 hatch animation
 - [ ] 瀏覽器返回鍵關閉 modal
 - [ ] 複製連結正確複製 URL 並顯示回饋
 - [ ] Web Share API 在支援的行動裝置上觸發
-- [ ] OG image 在社群平台分享時正確顯示（Twitter、Facebook、LINE 各測一次）
+- [ ] OG image 在社群平台分享時正確顯示（[Twitter Card Validator](https://cards-dev.twitter.com/validator)、[Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)、LINE 手動分享各測一次）（R3-M3）
+- [ ] `index.html` `<head>` 包含 `og:image`、`og:image:width`、`og:image:height`、`og:image:alt`、`twitter:image` 共 5 個 tag（R3-M3）
 - [ ] Chrome DevTools mobile emulation（iPhone SE, Pixel 5）驗收通過
 
 **回滾條件（R2-m3 簡化版）**：
@@ -406,10 +488,11 @@ npx vercel --prod
 | 項目                                           | 來源              |
 | ---------------------------------------------- | ----------------- |
 | Hatch animation 可跳過（點擊 + hash 自動跳過） | m3                |
-| 三幀動畫實作（偶爾觸發 frame 2）               | M6                |
 | 行動版語言切換器改為下拉選單                   | M3                |
 | H1 + meta description 強化圖鑑語意             | buddyboard 差異化 |
 | README 首段加 buddyboard.xyz 互補連結          | buddyboard 差異化 |
+
+> **已移除**：M6「三幀動畫實作」條目。依 Round 2 R2-m2 決策已降級為死代碼清理 — `data/species.js` 頂部註解（commit `9653e5b`）說明 `frames[2]` 為未來特殊動作保留、目前不實作。此處保留說明是為了避免實作 agent 誤讀 PRD 字面意思而重新觸發三幀動畫開發（R3-M1）。
 
 #### SEO 差異化細節
 
