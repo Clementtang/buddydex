@@ -144,6 +144,9 @@ export const TRANSLATIONS = {
       hats: "Hats",
       on: "On",
       off: "Off",
+      copyLink: "Copy link",
+      copied: "Copied!",
+      share: "Share",
     },
     hatch: {
       hatching: "> Hatching...",
@@ -290,6 +293,9 @@ export const TRANSLATIONS = {
       hats: "帽子",
       on: "開",
       off: "關",
+      copyLink: "複製連結",
+      copied: "已複製！",
+      share: "分享",
     },
     hatch: {
       hatching: "> 孵化中...",
@@ -441,6 +447,9 @@ export const TRANSLATIONS = {
       hats: "帽子",
       on: "オン",
       off: "オフ",
+      copyLink: "リンクをコピー",
+      copied: "コピーしました！",
+      share: "共有",
     },
     hatch: {
       hatching: "> ふ化中...",
@@ -600,6 +609,9 @@ export const TRANSLATIONS = {
       hats: "모자",
       on: "켜짐",
       off: "꺼짐",
+      copyLink: "링크 복사",
+      copied: "복사됨!",
+      share: "공유",
     },
     hatch: {
       hatching: "> 부화 중...",
@@ -746,6 +758,9 @@ export const TRANSLATIONS = {
       hats: "帽子",
       on: "开",
       off: "关",
+      copyLink: "复制链接",
+      copied: "已复制！",
+      share: "分享",
     },
     hatch: {
       hatching: "> 孵化中...",

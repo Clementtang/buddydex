@@ -31,6 +31,13 @@ try {
 }
 
 function lockBodyScroll() {
+  // Re-entry guard: if a second openDetail() fires while the modal is
+  // already open (e.g. a hashchange event triggered by the user
+  // typing #cat while #duck is showing), the `window.scrollY` we see
+  // here is already 0 because the body is locked. Overwriting
+  // dataset.scrollY with 0 would lose the real restore target.
+  if (document.body.classList.contains("scroll-locked")) return;
+
   const scrollY = window.scrollY;
   document.body.dataset.scrollY = String(scrollY);
   if (scrollLockSheet) {
@@ -47,6 +54,30 @@ function unlockBodyScroll() {
     scrollLockSheet.replaceSync("");
   }
   window.scrollTo(0, scrollY);
+}
+
+// Feature 1 hash routing helpers. Keep the URL hash in sync with
+// modal state so users can share deep links and use browser
+// back/forward to navigate in and out of the detail view. We use
+// pushState on open (so the back button becomes "close") and
+// replaceState on close (so the modal's history entry doesn't
+// linger after it's dismissed). Neither history API call fires
+// a hashchange event, so the main.js hashchange listener is only
+// ever triggered by real user navigation, not our own writes.
+function pushHashForSpecies(speciesId) {
+  const newHash = "#" + speciesId;
+  if (window.location.hash === newHash) return;
+  const newUrl = window.location.pathname + window.location.search + newHash;
+  history.pushState(null, "", newUrl);
+}
+
+function clearHashPreservingSearch() {
+  if (!window.location.hash) return;
+  history.replaceState(
+    null,
+    "",
+    window.location.pathname + window.location.search,
+  );
 }
 
 // Writes a one-off message to the detail modal's aria-live region.
@@ -82,8 +113,12 @@ export function setupDetailOverlay() {
   const closeButton = document.getElementById("detail-close");
 
   function close() {
+    // Only act if we were actually open — protects against repeat
+    // calls from hashchange listeners after a programmatic close.
+    if (!overlay.classList.contains("visible")) return;
     overlay.classList.remove("visible");
     unlockBodyScroll();
+    clearHashPreservingSearch();
     const announcer = document.getElementById("detail-announce");
     if (announcer) announcer.textContent = "";
     if (animationInterval) {
@@ -118,6 +153,12 @@ export function openDetail(speciesId, detailRefs) {
   const species = SPECIES.find((s) => s.id === speciesId);
   if (!species) return;
 
+  // Sync the URL hash so this modal state is shareable and the
+  // browser back button closes the modal (see Feature 1 hash
+  // routing). No-op when the hash is already correct (e.g. when
+  // the user arrived via /#duck directly).
+  pushHashForSpecies(speciesId);
+
   // State
   let currentEye = DEFAULT_EYE;
   let currentRarity = DEFAULT_RARITY;
@@ -139,10 +180,72 @@ export function openDetail(speciesId, detailRefs) {
   function buildControls() {
     info.innerHTML = "";
 
-    // Name
+    // Name row: heading + share/copy action buttons
+    const nameRow = document.createElement("div");
+    nameRow.className = "detail-name-row";
+
     const name = document.createElement("h2");
     name.textContent = t(`species.${species.id}.name`);
-    info.appendChild(name);
+    nameRow.appendChild(name);
+
+    const actionGroup = document.createElement("div");
+    actionGroup.className = "detail-share-actions";
+
+    // Copy link — always shown. Uses navigator.clipboard which is
+    // available on all CSP-safe modern browsers (requires HTTPS,
+    // which BuddyDex has). Briefly swaps button text to "Copied!"
+    // and also announces through the sr-only live region.
+    const copyBtn = document.createElement("button");
+    copyBtn.type = "button";
+    copyBtn.className = "detail-action-btn copy-link-btn";
+    const copyLabel = t("detail.copyLink");
+    copyBtn.textContent = copyLabel;
+    copyBtn.setAttribute("aria-label", copyLabel);
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+      } catch {
+        // Clipboard permission denied or API missing — treat as no-op.
+        return;
+      }
+      const copiedLabel = t("detail.copied");
+      copyBtn.textContent = copiedLabel;
+      announce(copiedLabel);
+      setTimeout(() => {
+        copyBtn.textContent = copyLabel;
+      }, 1500);
+    });
+    actionGroup.appendChild(copyBtn);
+
+    // Web Share API — only shown when supported (typical on mobile).
+    // On unsupported browsers we silently omit the button so users
+    // still see Copy link as the primary share affordance.
+    if (
+      typeof navigator !== "undefined" &&
+      typeof navigator.share === "function"
+    ) {
+      const shareBtn = document.createElement("button");
+      shareBtn.type = "button";
+      shareBtn.className = "detail-action-btn share-btn";
+      const shareLabel = t("detail.share");
+      shareBtn.textContent = shareLabel;
+      shareBtn.setAttribute("aria-label", shareLabel);
+      shareBtn.addEventListener("click", async () => {
+        try {
+          await navigator.share({
+            title: t(`species.${species.id}.name`),
+            text: t(`species.${species.id}.description`),
+            url: window.location.href,
+          });
+        } catch {
+          // User cancelled the share sheet, or share failed — no-op.
+        }
+      });
+      actionGroup.appendChild(shareBtn);
+    }
+
+    nameRow.appendChild(actionGroup);
+    info.appendChild(nameRow);
 
     // Description
     const desc = document.createElement("p");

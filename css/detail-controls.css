@@ -97,6 +97,63 @@ body.scroll-locked {
   width: 100%;
 }
 
+/* ============================================
+   Feature 1 — Share / Copy link actions
+   ============================================ */
+
+.detail-name-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.detail-name-row h2 {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.detail-share-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex: 0 0 auto;
+}
+
+.detail-action-btn {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 0.3em 0.7em;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.detail-action-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.detail-action-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .detail-action-btn {
+    font-size: 0.85rem;
+    padding: 0.5em 0.8em;
+    min-height: 40px;
+  }
+}
+
 /* Hat buttons */
 .hat-btn {
   font-size: 0.65rem;
