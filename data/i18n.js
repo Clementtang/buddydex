@@ -4,6 +4,8 @@ export const TRANSLATIONS = {
       title: "BuddyDex",
       subtitle: "A field guide to Claude Buddies",
       note: "ASCII art is original fan-art and may differ from actual in-game sprites",
+      randomButton: "Surprise me",
+      randomButtonAria: "Show a random buddy",
     },
     mechanics: {
       sectionTitle: "How It Works",
@@ -168,6 +170,8 @@ export const TRANSLATIONS = {
       title: "BuddyDex",
       subtitle: "Claude Buddy 圖鑑",
       note: "ASCII 圖像為原創同人創作，可能與遊戲內實際角色有所不同",
+      randomButton: "隨機看一隻",
+      randomButtonAria: "隨機顯示一隻 buddy",
     },
     mechanics: {
       sectionTitle: "系統機制",
@@ -316,6 +320,8 @@ export const TRANSLATIONS = {
       title: "BuddyDex",
       subtitle: "Claude Buddy 図鑑",
       note: "ASCIIアートはオリジナルのファンアートであり、ゲーム内の実際のスプライトとは異なる場合があります",
+      randomButton: "ランダム",
+      randomButtonAria: "ランダムな buddy を表示",
     },
     mechanics: {
       sectionTitle: "システム概要",
@@ -471,6 +477,8 @@ export const TRANSLATIONS = {
       title: "BuddyDex",
       subtitle: "Claude Buddy 도감",
       note: "ASCII 아트는 오리지널 팬아트이며, 실제 게임 내 스프라이트와 다를 수 있습니다",
+      randomButton: "랜덤 버디",
+      randomButtonAria: "랜덤 buddy 보기",
     },
     mechanics: {
       sectionTitle: "시스템 안내",
@@ -633,6 +641,8 @@ export const TRANSLATIONS = {
       title: "BuddyDex",
       subtitle: "Claude Buddy 图鉴",
       note: "ASCII 图像为原创同人作品，可能与游戏内实际角色有所不同",
+      randomButton: "随机看一只",
+      randomButtonAria: "随机显示一只 buddy",
     },
     mechanics: {
       sectionTitle: "系统机制",
