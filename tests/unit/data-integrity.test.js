@@ -3,6 +3,7 @@ import { SPECIES } from "../../data/species.js";
 import { TRANSLATIONS } from "../../data/i18n.js";
 import { HATS, EYES, getAvailableHats } from "../../data/accessories.js";
 import { RARITIES } from "../../data/rarity.js";
+import { STATS } from "../../data/stats.js";
 
 // Guards against silent data drift — the kind that shows up as a
 // missing description in ja, a half-filled new species, or a
@@ -78,6 +79,15 @@ describe("data integrity", () => {
     const ids = SPECIES.map((s) => s.id);
     const unique = new Set(ids);
     expect(unique.size, "duplicate species ids").toBe(ids.length);
+  });
+
+  it("every stat id has a localized label in every language", () => {
+    for (const stat of STATS) {
+      for (const lang of LANGS) {
+        const label = TRANSLATIONS[lang]?.stats?.[stat.id];
+        expect(label, `${lang}.stats.${stat.id}`).toBeTruthy();
+      }
+    }
   });
 
   // R6-m3: accessories.js has a private RARITY_ORDER array that

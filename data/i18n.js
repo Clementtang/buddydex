@@ -42,6 +42,18 @@ export const TRANSLATIONS = {
         description:
           "{eyeCount} eye styles and {hatCount} hats to customize your buddy. Higher rarity unlocks more hat options.",
       },
+      stats: {
+        title: "Stats",
+        description:
+          "Five community-observed stats, each rolled 0-100 with a floor tied to rarity. Names below are working labels pending official confirmation.",
+      },
+    },
+    stats: {
+      debugging: "Debugging",
+      patience: "Patience",
+      chaos: "Chaos",
+      wisdom: "Wisdom",
+      snark: "Snark",
     },
     species: {
       duck: {
@@ -162,6 +174,7 @@ export const TRANSLATIONS = {
       shiny: "Shiny",
       eyes: "Eyes",
       hats: "Hats",
+      stats: "Stats",
       on: "On",
       off: "Off",
       copyLink: "Copy link",
@@ -226,6 +239,18 @@ export const TRANSLATIONS = {
         description:
           "{eyeCount} 種眼睛樣式與 {hatCount} 頂帽子可自訂你的 Buddy。稀有度越高，可解鎖越多帽子。",
       },
+      stats: {
+        title: "五維屬性",
+        description:
+          "社群觀察到五項屬性，每項 0-100 隨機，下限由稀有度決定。以下名稱為社群暫定，待官方確認。",
+      },
+    },
+    stats: {
+      debugging: "除錯",
+      patience: "耐心",
+      chaos: "混亂",
+      wisdom: "智慧",
+      snark: "嘴砲",
     },
     species: {
       duck: {
@@ -331,6 +356,7 @@ export const TRANSLATIONS = {
       shiny: "閃光",
       eyes: "眼睛",
       hats: "帽子",
+      stats: "五維屬性",
       on: "開",
       off: "關",
       copyLink: "複製連結",
@@ -395,6 +421,18 @@ export const TRANSLATIONS = {
         description:
           "{eyeCount}種類の目と{hatCount}種類の帽子でバディをカスタマイズできます。レアリティが高いほど、より多くの帽子が解放されます。",
       },
+      stats: {
+        title: "ステータス",
+        description:
+          "コミュニティが観察した5つのステータス。各項目は0-100の範囲で、下限値はレアリティによって決まります。以下の名称は暫定で、公式確認待ちです。",
+      },
+    },
+    stats: {
+      debugging: "デバッグ",
+      patience: "忍耐",
+      chaos: "カオス",
+      wisdom: "知恵",
+      snark: "皮肉",
     },
     species: {
       duck: {
@@ -506,6 +544,7 @@ export const TRANSLATIONS = {
       shiny: "シャイニー",
       eyes: "目",
       hats: "帽子",
+      stats: "ステータス",
       on: "オン",
       off: "オフ",
       copyLink: "リンクをコピー",
@@ -570,6 +609,18 @@ export const TRANSLATIONS = {
         description:
           "{eyeCount}가지 눈 스타일과 {hatCount}가지 모자로 버디를 꾸밀 수 있습니다. 높은 희귀도일수록 더 많은 모자가 해금됩니다.",
       },
+      stats: {
+        title: "스탯",
+        description:
+          "커뮤니티가 관찰한 다섯 가지 스탯. 각각 0-100 범위에서 굴리며, 하한값은 희귀도에 따라 결정됩니다. 아래 이름은 공식 확인 전 임시 표기입니다.",
+      },
+    },
+    stats: {
+      debugging: "디버깅",
+      patience: "인내",
+      chaos: "혼돈",
+      wisdom: "지혜",
+      snark: "비꼼",
     },
     species: {
       duck: {
@@ -688,6 +739,7 @@ export const TRANSLATIONS = {
       shiny: "샤이니",
       eyes: "눈",
       hats: "모자",
+      stats: "스탯",
       on: "켜짐",
       off: "꺼짐",
       copyLink: "링크 복사",
@@ -752,6 +804,18 @@ export const TRANSLATIONS = {
         description:
           "{eyeCount} 种眼睛样式与 {hatCount} 顶帽子可自定义你的 Buddy。稀有度越高，可解锁越多帽子。",
       },
+      stats: {
+        title: "五维属性",
+        description:
+          "社区观察到五项属性，每项 0-100 随机，下限由稀有度决定。以下名称为社区暂定，待官方确认。",
+      },
+    },
+    stats: {
+      debugging: "调试",
+      patience: "耐心",
+      chaos: "混乱",
+      wisdom: "智慧",
+      snark: "嘴炮",
     },
     species: {
       duck: {
@@ -857,6 +921,7 @@ export const TRANSLATIONS = {
       shiny: "闪光",
       eyes: "眼睛",
       hats: "帽子",
+      stats: "五维属性",
       on: "开",
       off: "关",
       copyLink: "复制链接",
