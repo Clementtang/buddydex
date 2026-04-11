@@ -303,6 +303,16 @@
   }
 }
 
+/* Section header row — title on the left, action button on the right */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+}
+
 /* Section title for Species */
 .section-title {
   font-family: var(--font-mono);
@@ -310,7 +320,43 @@
   color: var(--text-primary);
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin-bottom: var(--space-lg);
+  margin-bottom: 0;
+}
+
+/* Feature 2 random explorer button */
+.random-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: transparent;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.random-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(218, 119, 86, 0.08);
+}
+
+.random-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .random-btn {
+    font-size: 0.85rem;
+    min-height: 40px;
+  }
 }
 
 .detail-panel .detail-info {
