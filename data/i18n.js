@@ -7,6 +7,24 @@ export const TRANSLATIONS = {
       randomButton: "Surprise me",
       randomButtonAria: "Show a random buddy",
     },
+    teaching: {
+      title: "Customize your buddy",
+      disclaimer:
+        "These tips come from community experimentation. Claude Code's buddy feature may behave differently across versions — experiment with a backup of your config and don't expect official support.",
+      name: {
+        title: "Change the name",
+        body: "The name you see when your buddy greets you is usually just a string in your Claude Code configuration. Find the buddy's name entry and swap in whatever you like — a friend, a character, your favorite mushroom.",
+      },
+      personality: {
+        title: "Change the personality",
+        body: "Buddies take on a personality through a short instruction. Community experiments have produced everything from grumpy pirates to overly-enthusiastic cheerleaders. Keep the instruction short and specific for clearer results.",
+      },
+      language: {
+        title: "Change the response language",
+        body: "Want your buddy to respond in your preferred language? Add a language instruction to its configuration. Being explicit about both the language name and the desired register tends to work best.",
+      },
+      closingNote: "If something breaks, restore your backup and try again.",
+    },
     mechanics: {
       sectionTitle: "How It Works",
       rarity: {
@@ -173,6 +191,24 @@ export const TRANSLATIONS = {
       randomButton: "隨機看一隻",
       randomButtonAria: "隨機顯示一隻 buddy",
     },
+    teaching: {
+      title: "自訂你的 Buddy",
+      disclaimer:
+        "以下是社群實驗出來的做法，並非官方文件。Claude Code 的 buddy 功能可能隨版本變動 — 修改設定前先備份，也不要期待官方支援。",
+      name: {
+        title: "修改名字",
+        body: "你的 buddy 問候你時看到的名字，通常就是 Claude Code 設定檔裡的一個字串。找到 buddy 的 name 欄位，換成你喜歡的 — 朋友、角色、最愛的香菇都可以。",
+      },
+      personality: {
+        title: "修改人格",
+        body: "Buddy 的個性來自一段簡短的指示。社群實驗涵蓋從壞脾氣海盜到過度熱情啦啦隊長的各種風格。指示保持精簡具體，效果最穩。",
+      },
+      language: {
+        title: "修改回覆語言",
+        body: "想讓 buddy 用你偏好的語言回覆？在設定裡加上語言指示。同時明確指出語言名稱與希望的語氣，通常效果最好。",
+      },
+      closingNote: "如果壞掉了，還原備份再試一次。",
+    },
     mechanics: {
       sectionTitle: "系統機制",
       rarity: {
@@ -322,6 +358,25 @@ export const TRANSLATIONS = {
       note: "ASCIIアートはオリジナルのファンアートであり、ゲーム内の実際のスプライトとは異なる場合があります",
       randomButton: "ランダム",
       randomButtonAria: "ランダムな buddy を表示",
+    },
+    teaching: {
+      title: "Buddy をカスタマイズする",
+      disclaimer:
+        "以下はコミュニティの実験によるメモで、公式ドキュメントではありません。Claude Code の buddy 機能はバージョンによって挙動が変わる可能性があります — 設定を変更する前にバックアップを取り、公式サポートは期待しないでください。",
+      name: {
+        title: "名前を変更する",
+        body: "buddy が挨拶してくるときの名前は、通常 Claude Code の設定ファイル内の文字列に過ぎません。buddy の name エントリを見つけて、好きなもの — 友達、キャラクター、お気に入りのキノコ — に置き換えましょう。",
+      },
+      personality: {
+        title: "性格を変更する",
+        body: "buddy の性格は短い指示文によって決まります。コミュニティの実験では、不機嫌な海賊から熱狂的すぎる応援団長まで様々な例があります。指示は短く具体的にすると結果が安定します。",
+      },
+      language: {
+        title: "返答の言語を変更する",
+        body: "buddy に好みの言語で返答してほしい？設定に言語の指示を追加しましょう。言語名と希望する口調の両方を明確に指定すると、最も効果的です。",
+      },
+      closingNote:
+        "何か壊れたら、バックアップを復元してもう一度試してください。",
     },
     mechanics: {
       sectionTitle: "システム概要",
@@ -479,6 +534,24 @@ export const TRANSLATIONS = {
       note: "ASCII 아트는 오리지널 팬아트이며, 실제 게임 내 스프라이트와 다를 수 있습니다",
       randomButton: "랜덤 버디",
       randomButtonAria: "랜덤 buddy 보기",
+    },
+    teaching: {
+      title: "Buddy 커스터마이즈하기",
+      disclaimer:
+        "아래는 커뮤니티 실험에서 나온 팁이며 공식 문서가 아닙니다. Claude Code의 buddy 기능은 버전에 따라 다르게 동작할 수 있습니다 — 설정을 수정하기 전에 백업하고, 공식 지원은 기대하지 마세요.",
+      name: {
+        title: "이름 바꾸기",
+        body: "buddy가 인사할 때 보이는 이름은 보통 Claude Code 설정 파일의 문자열일 뿐입니다. buddy의 name 항목을 찾아서 원하는 것으로 바꾸세요 — 친구, 캐릭터, 좋아하는 버섯 이름이든.",
+      },
+      personality: {
+        title: "성격 바꾸기",
+        body: "buddy의 성격은 짧은 지시문으로 만들어집니다. 커뮤니티 실험에서는 까칠한 해적부터 과하게 밝은 치어리더까지 다양한 예가 나왔습니다. 지시문은 짧고 구체적일수록 결과가 일관됩니다.",
+      },
+      language: {
+        title: "응답 언어 바꾸기",
+        body: "buddy가 원하는 언어로 응답하길 바라나요? 설정에 언어 지시문을 추가하세요. 언어 이름과 원하는 어조를 모두 명시하면 가장 효과적입니다.",
+      },
+      closingNote: "뭔가 깨지면 백업을 복원하고 다시 시도하세요.",
     },
     mechanics: {
       sectionTitle: "시스템 안내",
@@ -643,6 +716,24 @@ export const TRANSLATIONS = {
       note: "ASCII 图像为原创同人作品，可能与游戏内实际角色有所不同",
       randomButton: "随机看一只",
       randomButtonAria: "随机显示一只 buddy",
+    },
+    teaching: {
+      title: "自定义你的 Buddy",
+      disclaimer:
+        "以下是社区实验出来的做法，并非官方文档。Claude Code 的 buddy 功能可能随版本变动 — 修改设置前先备份，也不要期待官方支持。",
+      name: {
+        title: "修改名字",
+        body: "你的 buddy 问候你时看到的名字，通常就是 Claude Code 设置文件里的一个字符串。找到 buddy 的 name 字段，换成你喜欢的 — 朋友、角色、最爱的香菇都可以。",
+      },
+      personality: {
+        title: "修改人格",
+        body: "Buddy 的个性来自一段简短的指示。社区实验涵盖从坏脾气海盗到过度热情啦啦队长的各种风格。指示保持精简具体，效果最稳。",
+      },
+      language: {
+        title: "修改回复语言",
+        body: "想让 buddy 用你偏好的语言回复？在设置里加上语言指示。同时明确指出语言名称与希望的语气，通常效果最好。",
+      },
+      closingNote: "如果坏掉了，还原备份再试一次。",
     },
     mechanics: {
       sectionTitle: "系统机制",
