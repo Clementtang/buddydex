@@ -4,6 +4,7 @@ import { renderMechanics } from "./render-mechanics.js";
 import { renderSpeciesGrid } from "./render-grid.js";
 import { setupDetailOverlay, openDetail } from "./render-detail.js";
 import { parseHashSpecies, clearHash } from "./hash-router.js";
+import { SPECIES } from "../data/species.js";
 
 const LANG_LABELS = {
   en: "English",
@@ -18,6 +19,13 @@ function updateStaticText() {
   document.getElementById("site-subtitle").textContent = t("site.subtitle");
   document.getElementById("site-note").textContent = t("site.note");
   document.getElementById("section-title").textContent = t("sectionTitle");
+
+  // Feature 2 random button — label + aria-label both localized.
+  const randomBtn = document.getElementById("random-btn");
+  if (randomBtn) {
+    randomBtn.textContent = t("site.randomButton");
+    randomBtn.setAttribute("aria-label", t("site.randomButtonAria"));
+  }
 
   const mechanicsTitle = document.getElementById("mechanics-title");
   if (mechanicsTitle)
@@ -103,6 +111,31 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     openDetail(card.dataset.speciesId, detailRefs);
   });
+
+  // Feature 2 random explorer — surprise-me button next to the
+  // Species section title. Picks a uniform-random species id,
+  // avoiding an immediate repeat of the previous pick, and opens
+  // the detail modal (which also pushes the hash so the user can
+  // share the result). Works via pointer and via keyboard
+  // Enter/Space for a11y.
+  let lastRandomSpeciesId = null;
+  function pickRandomSpecies() {
+    if (SPECIES.length === 0) return null;
+    if (SPECIES.length === 1) return SPECIES[0].id;
+    let candidate;
+    do {
+      candidate = SPECIES[Math.floor(Math.random() * SPECIES.length)].id;
+    } while (candidate === lastRandomSpeciesId);
+    lastRandomSpeciesId = candidate;
+    return candidate;
+  }
+  const randomBtn = document.getElementById("random-btn");
+  if (randomBtn) {
+    randomBtn.addEventListener("click", () => {
+      const id = pickRandomSpecies();
+      if (id) openDetail(id, detailRefs);
+    });
+  }
 
   // Open the modal now if we arrived with a valid deep-link hash.
   if (initialSpeciesFromHash) {
