@@ -9,10 +9,17 @@ const EGG_FRAMES = [
 
 const STORAGE_KEY = "buddydex-hatched";
 
-export async function runHatchAnimation() {
-  if (localStorage.getItem(STORAGE_KEY)) {
+/**
+ * @param {{ skip?: boolean }} [opts] — when `skip` is true (used by
+ * Feature 1 hash routing so a direct /#duck link doesn't flash the
+ * egg on arrival), the overlay is removed immediately and the
+ * localStorage flag is NOT set, so a subsequent plain visit still
+ * sees the hatch once.
+ */
+export async function runHatchAnimation({ skip = false } = {}) {
+  if (skip || localStorage.getItem(STORAGE_KEY)) {
     const overlay = document.getElementById("hatch-overlay");
-    overlay.remove();
+    overlay?.remove();
     return;
   }
 

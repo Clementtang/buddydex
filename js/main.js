@@ -3,6 +3,7 @@ import { runHatchAnimation } from "./hatch-animation.js";
 import { renderMechanics } from "./render-mechanics.js";
 import { renderSpeciesGrid } from "./render-grid.js";
 import { setupDetailOverlay, openDetail } from "./render-detail.js";
+import { parseHashSpecies, clearHash } from "./hash-router.js";
 
 const LANG_LABELS = {
   en: "English",
@@ -67,8 +68,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize i18n before anything else
   initI18n();
 
-  // Hatch animation (first visit only)
-  runHatchAnimation();
+  // Feature 1 hash routing: check the URL before the hatch animation
+  // so a direct /#duck link can skip the egg flash. An invalid hash
+  // is cleared in place (preserving query string — R3-m4) so it
+  // doesn't linger and break sharing.
+  const initialSpeciesFromHash = parseHashSpecies();
+  if (!initialSpeciesFromHash && window.location.hash) {
+    clearHash();
+  }
+
+  // Hatch animation (first visit only; skipped when we're about to
+  // auto-open a modal from a shared URL so the egg doesn't flash
+  // in front of the thing the visitor came to see).
+  runHatchAnimation({ skip: initialSpeciesFromHash !== null });
 
   // Initial render
   rerender();
@@ -90,5 +102,26 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!card) return;
     event.preventDefault();
     openDetail(card.dataset.speciesId, detailRefs);
+  });
+
+  // Open the modal now if we arrived with a valid deep-link hash.
+  if (initialSpeciesFromHash) {
+    openDetail(initialSpeciesFromHash, detailRefs);
+  }
+
+  // Keep modal state and URL hash in sync on real user navigation.
+  // pushState / replaceState from within render-detail.js do NOT fire
+  // hashchange, so this handler only runs for genuine back/forward or
+  // manual URL edits. When the hash changes to an invalid value we
+  // clear it and close any open modal.
+  window.addEventListener("hashchange", () => {
+    const id = parseHashSpecies();
+    const modalOpen = detailRefs.overlay.classList.contains("visible");
+    if (id) {
+      openDetail(id, detailRefs);
+    } else {
+      if (window.location.hash) clearHash();
+      if (modalOpen) detailRefs.close();
+    }
   });
 });
