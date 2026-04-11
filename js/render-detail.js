@@ -1,6 +1,7 @@
 import { SPECIES } from "../data/species.js";
 import { RARITIES } from "../data/rarity.js";
 import { EYES, HATS, getAvailableHats } from "../data/accessories.js";
+import { STATS, rollStats, renderStatBar } from "../data/stats.js";
 import { t } from "./i18n.js";
 
 const DEFAULT_EYE = EYES[0];
@@ -276,6 +277,42 @@ export function openDetail(speciesId, detailRefs) {
             updatePreview();
           });
           wrapper.appendChild(button);
+        }
+        return wrapper;
+      }),
+    );
+
+    // Stats block — rerolls every time buildControls runs, which
+    // happens on rarity change and species switch. Each stat renders
+    // as <label><bar><value> in a monospace row. Bars are ASCII text
+    // (renderStatBar) so no inline width is set, keeping the strict
+    // CSP contract; the rarity-coloured fill comes from the
+    // data-rarity attribute on .stat-bar matching selectors in
+    // css/detail-controls.css.
+    info.appendChild(
+      buildControlGroup(t("detail.stats"), () => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "stats-grid";
+        const rolled = rollStats(currentRarity.statFloor);
+        for (const stat of rolled) {
+          const row = document.createElement("div");
+          row.className = "stat-row";
+
+          const label = document.createElement("span");
+          label.className = "stat-label";
+          label.textContent = t(`stats.${stat.id}`);
+
+          const bar = document.createElement("span");
+          bar.className = "stat-bar";
+          bar.dataset.rarity = currentRarity.id;
+          bar.textContent = renderStatBar(stat.value);
+
+          const value = document.createElement("span");
+          value.className = "stat-value";
+          value.textContent = String(stat.value);
+
+          row.append(label, bar, value);
+          wrapper.appendChild(row);
         }
         return wrapper;
       }),

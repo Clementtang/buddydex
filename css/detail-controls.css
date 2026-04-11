@@ -98,6 +98,70 @@ body.scroll-locked {
 }
 
 /* ============================================
+   Feature 4 — Stats block in detail modal
+   ============================================ */
+
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 6em 1fr 2.5em;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-bar {
+  color: var(--text-secondary);
+  letter-spacing: 0;
+  white-space: pre;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-bar[data-rarity="common"] {
+  color: var(--rarity-common);
+}
+.stat-bar[data-rarity="uncommon"] {
+  color: var(--rarity-uncommon);
+}
+.stat-bar[data-rarity="rare"] {
+  color: var(--rarity-rare);
+}
+.stat-bar[data-rarity="epic"] {
+  color: var(--rarity-epic);
+}
+.stat-bar[data-rarity="legendary"] {
+  color: var(--rarity-legendary);
+}
+
+.stat-value {
+  color: var(--text-primary);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 600px) {
+  .stat-row {
+    font-size: 0.85rem;
+    grid-template-columns: 5em 1fr 2.5em;
+  }
+}
+
+/* ============================================
    Feature 1 — Share / Copy link actions
    ============================================ */
 
