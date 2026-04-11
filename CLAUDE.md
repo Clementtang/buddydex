@@ -51,9 +51,9 @@ Expect **zero** matches on actual `.style.` property writes. Only comments shoul
 3. Match against the `SPECIES` allowlist (`SPECIES.find(s => s.id === decoded)`)
 4. Never let hash-derived strings enter `innerHTML`
 
-Full reference implementation: `parseHashSpecies()` in `docs/prd.md` v2.4 Feature 1 section. Copy it, do not reinvent.
+Shipped implementation: `js/hash-router.js` (`parseHashSpecies()` + `clearHash()`), covered by `tests/unit/hash-router.test.js` with the full malicious-input test matrix (16 cases). Use these as the pattern for any new URL-sourced inputs — do not reinvent hash decoding.
 
-Malicious hash test cases to include in Vitest when implementing:
+Malicious hash test cases in the suite:
 `#<script>alert(1)</script>`, `#duck"><img src=x>`, `#'; alert(1); //`, `#%3Cscript%3E`, `#%E0%A4%A` (malformed — expect `URIError`).
 
 ### Accessibility — `aria-live` never on animating elements
@@ -79,7 +79,7 @@ Species name + description is also covered: every species id in `data/species.js
 - **Silent-failure contracts are explicit**. `getAvailableHats("unknown")` returns `[]` on purpose — the test at `tests/unit/accessories.test.js:44-56` documents this as a deliberate contract. Callers must pre-validate their rarity input via the `RARITIES` allowlist. Do NOT tighten the test to rely on the empty array as a validation signal.
 
 ```bash
-npm test   # expect 17/17 passing, ~500ms
+npm test   # expect 34/34 passing, ~500ms
 ```
 
 CI runs on push to `main` and PRs to `main` via `.github/workflows/test.yml`. Node 22 LTS, pinned in `.nvmrc` + `package.json` `engines`.
@@ -140,13 +140,14 @@ Older Safari falls through to a degraded path (one-frame scroll jump on modal op
 │   ├── components.css      # header, species grid, detail overlay, footer, shiny
 │   └── detail-controls.css # rarity/eye/hat pickers, shiny toggle, scroll-lock rule
 ├── js/
-│   ├── main.js             # boot, wires up sections, sets up detail overlay
+│   ├── main.js             # boot, wires up sections, hash routing listener
 │   ├── analytics.js        # GA4 init (CSP-compliant ES module)
 │   ├── i18n.js              # t(), setLang, initI18n with browser lang detection
+│   ├── hash-router.js      # parseHashSpecies + clearHash (F1 URL deep links)
 │   ├── render-grid.js       # species grid card rendering
 │   ├── render-mechanics.js  # mechanics section
-│   ├── render-detail.js     # detail overlay + try-on feature + scroll lock
-│   └── hatch-animation.js   # first-visit egg cracking animation
+│   ├── render-detail.js     # detail overlay + try-on + scroll lock + share actions
+│   └── hatch-animation.js   # first-visit egg cracking animation (skippable)
 ├── data/
 │   ├── species.js           # 18 species, frames[0..2] (frames[2] reserved, unused)
 │   ├── rarity.js            # 5 rarities with probability/color/statFloor
@@ -155,7 +156,8 @@ Older Safari falls through to a degraded path (one-frame scroll jump on modal op
 ├── tests/unit/
 │   ├── accessories.test.js        # getAvailableHats + silent-failure contract
 │   ├── i18n.test.js               # t() with vi.stubGlobal
-│   └── data-integrity.test.js     # structural invariants (species/i18n/hats/eyes)
+│   ├── hash-router.test.js        # parseHashSpecies allowlist + malicious input
+│   └── data-integrity.test.js     # structural invariants (species/i18n/hats/eyes/rarity)
 ├── .github/workflows/test.yml     # Node 22 + npm ci + npm test
 └── docs/
     ├── prd.md                      # current PRD (v2.4)
@@ -164,27 +166,32 @@ Older Safari falls through to a degraded path (one-frame scroll jump on modal op
     ├── research/encyclopedia-benchmarks.md        # competitive research
     ├── research/buddyboard-analysis.md            # competitor (buddyboard.xyz) analysis
     ├── devils-advocate-review-round{1..6}.md      # review findings
-    └── devils-advocate-response-round{1..5}.md    # implementation responses
+    └── devils-advocate-response-round{2..6}.md    # implementation responses (round 1 has none)
 ```
 
 ---
 
 ## Review history — how to read it
 
-Phase 0 went through six rounds of "devil's advocate" review. Each round is in `docs/devils-advocate-review-round{N}.md` with a corresponding `devils-advocate-response-round{N}.md` (except rounds 1 and 6, which have no response).
+Phase 0 went through six rounds of "devil's advocate" review. Each round is in `docs/devils-advocate-review-round{N}.md` with a corresponding `devils-advocate-response-round{N}.md` (round 1 has no response; rounds 2-6 all do).
 
 Review IDs follow the format `R{round}-{severity}{num}` where severity is `C` (critical), `M` (major), lowercase `m` (minor). Example: `R4-C1` = Round 4 Critical finding #1. When implementing a fix, reference the ID in the commit message — e.g., `fix(R4-C1): feature-detect CSSStyleSheet for Safari <16.4 fallback`.
 
 **Round 6 is the Phase 0 closure review.** Read it for the current state-of-the-world assessment.
 
-Phase 1 is planned but not started. See `docs/prd.md` v2.4 for scope.
+Phase 1 is in progress. Feature 1 (share functionality) shipped and verified. See `docs/prd.md` v2.4 for remaining scope.
 
 ---
 
 ## Phase status
 
 - Phase 0 (technical debt + infrastructure): **complete**, closed 2026-04-11
-- Phase 1 (share + random + teaching guide): **not started**
-- Phase 2 (search + collection + stats): **backlog**, gated on Phase 1 GA4 data
+- Phase 1 (share + random + teaching guide): **in progress**
+  - Feature 1 (share/hash routing + copy link + Web Share + og:image meta): **shipped** 2026-04-11
+  - Feature 2 (random explore button): **next**
+  - Feature 3 (buddy customization guide): queued
+  - Feature 4 (five-stat display): queued
+  - og-image.png PNG asset: not yet created (meta tags point at a stable filename and gracefully degrade to text-only preview until the file lands)
+- Phase 2 (search + collection + holographic foil): **backlog**, gated on Phase 1 GA4 data
 
-Phase 1 is blocked on no hard dependency — it can start whenever maintainer chooses. See `docs/prd.md` for priority sequencing (Feature 1 first for URL hash foundation, then Feature 2).
+Phase 1 "Done" minimum condition per PRD v2.4 = Feature 1 + Feature 2 shipped. Feature 3 and Feature 4 are additional scope that can land in the same phase or slip.
