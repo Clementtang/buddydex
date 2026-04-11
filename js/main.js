@@ -27,6 +27,25 @@ function updateStaticText() {
     randomBtn.setAttribute("aria-label", t("site.randomButtonAria"));
   }
 
+  // Feature 3 teaching section — static text. textContent only,
+  // never innerHTML; the static HTML holds the JSON code blocks
+  // that should remain untranslated (code is code).
+  const teachingMap = {
+    "teaching-title": "teaching.title",
+    "teaching-disclaimer": "teaching.disclaimer",
+    "teaching-name-title": "teaching.name.title",
+    "teaching-name-body": "teaching.name.body",
+    "teaching-personality-title": "teaching.personality.title",
+    "teaching-personality-body": "teaching.personality.body",
+    "teaching-language-title": "teaching.language.title",
+    "teaching-language-body": "teaching.language.body",
+    "teaching-closing": "teaching.closingNote",
+  };
+  for (const [id, key] of Object.entries(teachingMap)) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = t(key);
+  }
+
   const mechanicsTitle = document.getElementById("mechanics-title");
   if (mechanicsTitle)
     mechanicsTitle.textContent = t("mechanics.sectionTitle") || "";
