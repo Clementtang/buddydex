@@ -100,6 +100,14 @@
   line-height: 1.5;
 }
 
+.mechanic-card-footer {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  margin-top: var(--space-sm);
+  letter-spacing: 0.02em;
+}
+
 /* ============================================
    Species Grid
    ============================================ */
