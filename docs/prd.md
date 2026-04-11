@@ -252,11 +252,11 @@
 
 **驗收條件**：
 
-- [ ] `grep -n "\.style\." js/` 無 rarity-related 或 scroll-lock 的 inline style 寫入
-- [ ] Detail modal 切換 rarity 時按鈕顏色正確顯示（視覺上與重構前相同）
-- [ ] Scroll lock 正常運作（modal 開啟不 scroll jump，關閉時 scroll 位置恢復）於支援的瀏覽器
-- [ ] 在 `new CSSStyleSheet` throw 的環境（Safari 15 模擬 或 `Object.defineProperty(window, 'CSSStyleSheet', { get() { throw Error(); } })`）下，`render-detail.js` 仍能 import 成功，卡片點擊仍能開啟 modal
-- [ ] 重構後 0.A.2 CSP 可以不用 `'unsafe-inline'` 並通過驗收
+- [x] `grep -n "\.style\." js/` 無 rarity-related 或 scroll-lock 的 inline style 寫入（僅命中 code comment）
+- [x] Detail modal 切換 rarity 時按鈕顏色正確顯示（視覺上與重構前相同）— chrome-devtools-mcp 實測 5 個 rarity 的 computedColor 對應 `--rarity-*` token
+- [x] Scroll lock 正常運作（modal 開啟不 scroll jump，關閉時 scroll 位置恢復）於支援的瀏覽器 — chrome-devtools-mcp 實測 scrollY 187.5 → lock → unlock 恢復到 187
+- [x] 在 `new CSSStyleSheet` throw 的環境（`Object.defineProperty(window, 'CSSStyleSheet', { get() { throw new Error(); } })` 模擬）下，`render-detail.js` 仍能 import 成功、exports 正常、fallback sheet 不被添加 — chrome-devtools-mcp 端到端實測通過
+- [x] 重構後 0.A.2 CSP 可以不用 `'unsafe-inline'` 並通過驗收 — `vercel.json` CSP 已無 `'unsafe-inline'`，線上驗證無 CSP violation
 
 ### 批次 B：小批次
 
