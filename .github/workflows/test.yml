@@ -10,13 +10,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           # Node 20 goes EOL on 2026-04-30. Pin to Node 22 LTS
           # (EOL 2027-04-30) to buy another year of support.
+          # Note: @v5 of these actions runs the action plumbing on
+          # Node 24, replacing the @v4 internal Node 20 runtime that
+          # GitHub will force-upgrade on 2026-06-02. Project tests
+          # still run on the node-version specified above.
           node-version: "22"
           cache: "npm"
 
