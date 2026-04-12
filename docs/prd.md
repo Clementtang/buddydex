@@ -578,11 +578,27 @@ npx vercel --prod
 
 Phase 1 完成 = Feature 1（分享）+ Feature 2（隨機探索）已上線。Feature 3（教學指南）、Feature 4（Stats）和附帶修正為加分項。
 
+### Phase 1 完成狀態（2026-04-12）
+
+| 項目                                | 狀態          | 關鍵 Commit                                   |
+| ----------------------------------- | ------------- | --------------------------------------------- |
+| Feature 1：分享功能                 | ✅ 已上線驗證 | `a81c623` / `90c80bd` / `557f11f` / `bf65cf0` |
+| Feature 2：隨機探索按鈕             | ✅ 已上線驗證 | `319f848` / `2d82bd7` / `2ed5794`             |
+| Feature 3：自訂教學指南             | ✅ 已上線驗證 | `d29334a` / `ce12835` / `5096c12`             |
+| Feature 4：五維 Stats 顯示          | ✅ 已上線驗證 | `e13237c` / `baa2417` / `52e3fce` / `731b333` |
+| 附帶修正 m3（hatch click skip）     | ✅ 已上線     | `bc4e1e5`                                     |
+| 附帶修正 M3（mobile lang dropdown） | ✅ 已上線     | `52d8bf2`                                     |
+| 附帶修正 H1/meta/README             | ✅ 早期完成   | —                                             |
+| OG image PNG 本體                   | ⏳ 待產生     | meta tags 已部署，PNG 未建立                  |
+
+**GA4 7 天觀察期**：2026-04-12 → 2026-04-19
+
 上線後用 GA4 觀察 7 天：
 
 - 分享連結帶來的流量（referrer 分析）
 - 使用者停留時間和跳出率
 - 根據數據決定 Phase 2 方向
+- 觀察工具：`mcp__thufir__ga4_report`（startDate: 2026-04-12, endDate: 2026-04-19）
 
 ---
 
