@@ -61,23 +61,45 @@ function updateStaticText() {
 
 function buildLangSwitcher() {
   const container = document.getElementById("lang-switcher");
-  container.innerHTML = "";
+  container.replaceChildren();
   const currentLang = getLang();
 
+  // Desktop: button row (hidden on mobile via CSS media query).
+  const btnRow = document.createElement("div");
+  btnRow.className = "lang-btn-row";
   for (const lang of getSupportedLangs()) {
     const button = document.createElement("button");
     button.className = "lang-btn";
     button.textContent = LANG_LABELS[lang];
-    if (lang === currentLang) {
-      button.classList.add("active");
-    }
+    if (lang === currentLang) button.classList.add("active");
     button.addEventListener("click", () => {
       if (lang === getLang()) return;
       setLang(lang);
       rerender();
     });
-    container.appendChild(button);
+    btnRow.appendChild(button);
   }
+  container.appendChild(btnRow);
+
+  // Mobile: native <select> dropdown (hidden on desktop via CSS).
+  // 5 buttons at 320px is too tight for reliable touch targets
+  // (PRD M3). A native select gets the OS picker for free and
+  // meets the 44px minimum without squeezing.
+  const select = document.createElement("select");
+  select.className = "lang-select";
+  select.setAttribute("aria-label", "Language");
+  for (const lang of getSupportedLangs()) {
+    const option = document.createElement("option");
+    option.value = lang;
+    option.textContent = LANG_LABELS[lang];
+    if (lang === currentLang) option.selected = true;
+    select.appendChild(option);
+  }
+  select.addEventListener("change", () => {
+    setLang(select.value);
+    rerender();
+  });
+  container.appendChild(select);
 }
 
 function rerender() {
