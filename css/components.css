@@ -544,6 +544,7 @@
 .hatch-overlay.visible {
   opacity: 1;
   pointer-events: auto;
+  cursor: pointer;
 }
 
 .hatch-overlay .hatch-ascii {

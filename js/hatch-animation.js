@@ -9,6 +9,12 @@ const EGG_FRAMES = [
 
 const STORAGE_KEY = "buddydex-hatched";
 
+// Click-to-skip flag. When the user clicks the hatch overlay during
+// the animation, all remaining delays resolve instantly and
+// typewriter() completes in one frame. The animation fast-forwards
+// to the reveal, marks localStorage, and fades out. (PRD m3.)
+let skipRequested = false;
+
 /**
  * @param {{ skip?: boolean }} [opts] — when `skip` is true (used by
  * Feature 1 hash routing so a direct /#duck link doesn't flash the
@@ -23,11 +29,22 @@ export async function runHatchAnimation({ skip = false } = {}) {
     return;
   }
 
+  skipRequested = false;
+
   const overlay = document.getElementById("hatch-overlay");
   const asciiEl = document.getElementById("hatch-ascii");
   const messageEl = document.getElementById("hatch-message");
 
   overlay.classList.add("visible");
+  // cursor: pointer now lives in CSS on .hatch-overlay.visible
+  // (no inline style write — CSP contract).
+  overlay.addEventListener(
+    "click",
+    () => {
+      skipRequested = true;
+    },
+    { once: true },
+  );
 
   // Typewriter: "> Hatching..."
   await typewriter(messageEl, t("hatch.hatching"));
@@ -52,7 +69,7 @@ export async function runHatchAnimation({ skip = false } = {}) {
   await typewriter(messageEl, revealText);
 
   // Wait then fade out
-  await delay(1500);
+  await delay(skipRequested ? 300 : 1500);
   overlay.classList.remove("visible");
 
   // Wait for CSS transition to complete before removing
@@ -63,12 +80,21 @@ export async function runHatchAnimation({ skip = false } = {}) {
 }
 
 function delay(ms) {
+  if (skipRequested) return Promise.resolve();
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function typewriter(element, text) {
+  if (skipRequested) {
+    element.textContent = text;
+    return;
+  }
   element.textContent = "";
   for (const char of text) {
+    if (skipRequested) {
+      element.textContent = text;
+      return;
+    }
     element.textContent += char;
     await delay(40);
   }
