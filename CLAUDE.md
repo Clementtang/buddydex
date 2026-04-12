@@ -79,7 +79,7 @@ Species name + description is also covered: every species id in `data/species.js
 - **Silent-failure contracts are explicit**. `getAvailableHats("unknown")` returns `[]` on purpose — the test at `tests/unit/accessories.test.js:44-56` documents this as a deliberate contract. Callers must pre-validate their rarity input via the `RARITIES` allowlist. Do NOT tighten the test to rely on the empty array as a validation signal.
 
 ```bash
-npm test   # expect 34/34 passing, ~500ms
+npm test   # expect 47/47 passing, ~500ms
 ```
 
 CI runs on push to `main` and PRs to `main` via `.github/workflows/test.yml`. Node 22 LTS, pinned in `.nvmrc` + `package.json` `engines`.
@@ -137,27 +137,29 @@ Older Safari falls through to a degraded path (one-frame scroll jump on modal op
 │   ├── reset.css           # + .sr-only utility
 │   ├── tokens.css          # CSS variables (colors, spacing, fonts)
 │   ├── layout.css          # body/container/section
-│   ├── components.css      # header, species grid, detail overlay, footer, shiny
-│   └── detail-controls.css # rarity/eye/hat pickers, shiny toggle, scroll-lock rule
+│   ├── components.css      # header, species grid, detail overlay, footer, shiny, teaching, random btn
+│   └── detail-controls.css # rarity/eye/hat pickers, shiny toggle, scroll-lock, stats block, share actions
 ├── js/
-│   ├── main.js             # boot, wires up sections, hash routing listener
-│   ├── analytics.js        # GA4 init (CSP-compliant ES module)
+│   ├── main.js             # boot, hash routing, random pick, lang switcher, teaching wire-up
+│   ├── analytics.js        # GA4 init (CSP-compliant ES module, exposes window.gtag)
 │   ├── i18n.js              # t(), setLang, initI18n with browser lang detection
 │   ├── hash-router.js      # parseHashSpecies + clearHash (F1 URL deep links)
 │   ├── render-grid.js       # species grid card rendering
-│   ├── render-mechanics.js  # mechanics section
-│   ├── render-detail.js     # detail overlay + try-on + scroll lock + share actions
-│   └── hatch-animation.js   # first-visit egg cracking animation (skippable)
+│   ├── render-mechanics.js  # mechanics section (4 cards incl Stats)
+│   ├── render-detail.js     # detail overlay + try-on + scroll lock + share + stats
+│   └── hatch-animation.js   # first-visit egg cracking animation (click-to-skip + hash-skip)
 ├── data/
 │   ├── species.js           # 18 species, frames[0..2] (frames[2] reserved, unused)
 │   ├── rarity.js            # 5 rarities with probability/color/statFloor
 │   ├── accessories.js       # EYES, HATS, getAvailableHats
+│   ├── stats.js             # STATS (5 ids), rollStats, renderStatBar (F4)
 │   └── i18n.js              # TRANSLATIONS[lang][section][key] — 5 languages
 ├── tests/unit/
 │   ├── accessories.test.js        # getAvailableHats + silent-failure contract
 │   ├── i18n.test.js               # t() with vi.stubGlobal
-│   ├── hash-router.test.js        # parseHashSpecies allowlist + malicious input
-│   └── data-integrity.test.js     # structural invariants (species/i18n/hats/eyes/rarity)
+│   ├── hash-router.test.js        # parseHashSpecies allowlist + malicious input (16 cases)
+│   ├── stats.test.js              # rollStats range + renderStatBar shape (12 cases)
+│   └── data-integrity.test.js     # structural invariants (species/i18n/hats/eyes/rarity/stats)
 ├── .github/workflows/test.yml     # Node 22 + npm ci + npm test
 └── docs/
     ├── prd.md                      # current PRD (v2.4)
@@ -186,12 +188,14 @@ Phase 1 is in progress. Feature 1 (share functionality) shipped and verified. Se
 ## Phase status
 
 - Phase 0 (technical debt + infrastructure): **complete**, closed 2026-04-11
-- Phase 1 (share + random + teaching guide): **in progress**
-  - Feature 1 (share/hash routing + copy link + Web Share + og:image meta): **shipped** 2026-04-11
-  - Feature 2 (random explore button): **next**
-  - Feature 3 (buddy customization guide): queued
-  - Feature 4 (five-stat display): queued
-  - og-image.png PNG asset: not yet created (meta tags point at a stable filename and gracefully degrade to text-only preview until the file lands)
-- Phase 2 (search + collection + holographic foil): **backlog**, gated on Phase 1 GA4 data
+- Phase 1 (share + random + teaching guide + stats): **complete**, shipped 2026-04-12
+  - Feature 1 (share/hash routing + copy link + Web Share + og:image meta): **shipped**
+  - Feature 2 (random explore button): **shipped**
+  - Feature 3 (buddy customization guide): **shipped**
+  - Feature 4 (five-stat display): **shipped**
+  - Attached fixes (hatch click-skip, mobile lang dropdown, H1/meta/README): **shipped**
+  - og-image.png PNG asset: **pending** (meta tags deployed, PNG not yet created — social platforms gracefully degrade to text-only preview)
+  - GA4 7-day observation period: 2026-04-12 → 2026-04-19
+- Phase 2 (search + collection + holographic foil): **backlog**, gated on Phase 1 GA4 data (use `mcp__thufir__ga4_report` after 2026-04-19)
 
-Phase 1 "Done" minimum condition per PRD v2.4 = Feature 1 + Feature 2 shipped. Feature 3 and Feature 4 are additional scope that can land in the same phase or slip.
+Phase 1 "Done" minimum condition (Feature 1 + Feature 2) was met; Features 3 + 4 + all attached fixes also landed as bonus scope.
