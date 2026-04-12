@@ -6,6 +6,70 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-04-12
+
+### Added
+
+- **Share functionality (Feature 1)**
+  - URL hash routing: `buddydex.chatbot.tw/#duck` deep-links directly to a species detail modal
+  - Hash validation with `decodeURIComponent` + allowlist (XSS-safe, never enters `innerHTML`)
+  - Hatch animation auto-skipped when arriving via a shared hash link
+  - Copy link button in detail modal (clipboard API with "Copied!" feedback + screen reader announcement)
+  - Web Share API button on supported mobile browsers (falls back to copy link)
+  - `og:image` meta tags (`og:image`, `og:image:width`, `og:image:height`, `og:image:alt`, `twitter:image`) — PNG asset pending
+  - Browser back/forward navigation syncs modal open/close state via `hashchange` listener
+- **Random explorer button (Feature 2)**
+  - "Surprise me" button next to the Species section title
+  - Consecutive clicks guaranteed not to repeat the same species
+  - Localized label + aria-label in all 5 languages
+- **Buddy customization teaching guide (Feature 3)**
+  - Collapsible accordion section (native `<details>`/`<summary>`) below the species grid
+  - Three topics: change name, change personality, change response language
+  - Illustrative JSON examples in monospace code blocks
+  - Disclaimer framing content as community-discovered tips, not official documentation
+  - Full 5-language support
+- **Five-stat display system (Feature 4)**
+  - New "Stats" mechanics card listing Debugging, Patience, Chaos, Wisdom, Snark (community-observed names)
+  - Detail modal stats block with ASCII progress bars (`█`/`░`) coloured by rarity
+  - Stats roll randomly between rarity floor and 100, reroll on rarity/species switch
+  - Stat names localized in all 5 languages
+- **Data integrity test suite**: structural invariants for species, i18n keys, frames, hats, eyes, rarity order, and stat labels across all languages
+- **Stats unit tests**: `rollStats()` range/floor correctness, `renderStatBar()` output shape and clamping
+- **Hash router unit tests**: 16 cases covering happy path, empty/missing input, unknown species, and the full R2-M1 malicious hash menagerie
+- `CLAUDE.md` agent guide encoding Phase 0 constraints (CSP, hash handling, aria-live, i18n, testing conventions)
+- `DESIGN.md` living design system reference (colours, typography, rarity treatments, decisions log)
+- Root-level `.mcp.json` with `chrome-devtools-mcp` at project scope
+- `.nvmrc` pinned to Node 22
+- Buddyboard.xyz competitive analysis (`docs/research/buddyboard-analysis.md`)
+- Devil's advocate review rounds 1-6 with responses
+
+### Changed
+
+- Hatch animation now skippable by clicking anywhere on the overlay (fast-forwards to reveal)
+- Language switcher on mobile (≤600px) renders as a native `<select>` dropdown instead of 5 squeezed buttons
+- Mechanics section rendering switched from `innerHTML` to DOM API (`replaceChildren`) for XSS hygiene
+- Species section title wrapped in `.section-header` flex row to accommodate the random button
+- `render-detail.js` scroll lock refactored from inline `body.style.*` writes to constructable `CSSStyleSheet` + `document.adoptedStyleSheets` (CSP-safe, feature-detected for Safari < 16.4 fallback)
+- Rarity button colours driven by `data-rarity` CSS attribute selectors instead of JS inline styles
+- `package.json` engines field set to `>=22`
+- GitHub Actions upgraded from `actions/checkout@v4` + `actions/setup-node@v4` to `@v5` (Node 24 internal runtime)
+- CI Node version upgraded from 20 to 22 LTS (Node 20 EOL 2026-04-30)
+
+### Fixed
+
+- Inline GA4 initialization script extracted to `js/analytics.js` module, removing the last inline `<script>` from `index.html` (enables strict CSP)
+- `window.gtag` exposed globally from analytics module so future custom event tracking works
+- `aria-live` removed from the ASCII preview element that changes every 800ms; replaced with a dedicated `#detail-announce` visually-hidden announcer that fires only on user-initiated accessory changes
+- Constructable `CSSStyleSheet` wrapped in `try/catch` for Safari < 16.4 graceful fallback (prevents site-wide JS crash on older WebKit)
+
+### Security
+
+- `vercel.json` now ships strict Content-Security-Policy without `style-src 'unsafe-inline'`
+- Added `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'none'` to CSP
+- Added `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`
+- `font-src` includes `'self'` for future self-hosted font readiness
+- `vercel.json` tracked in git (previously `.gitignore`d)
+
 ## [1.4.0] - 2026-04-08
 
 ### Added
@@ -85,7 +149,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Responsive layout for mobile devices
 - Deployed to Vercel
 
-[unreleased]: https://github.com/Clementtang/buddydex/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/Clementtang/buddydex/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/Clementtang/buddydex/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Clementtang/buddydex/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Clementtang/buddydex/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/Clementtang/buddydex/compare/v1.1.0...v1.2.0
