@@ -1,10 +1,10 @@
 # BuddyDex
 
-A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet companions in Claude Code.
+> **Archive notice:** Claude Code's `/buddy` feature was retired on April 9, 2026. This project is preserved as a historical archive of the buddy species, mechanics, and community knowledge that existed during the feature's lifetime. The live site remains accessible; no further feature development is planned.
+
+A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet companions that were part of Claude Code.
 
 **Live site:** [buddydex.chatbot.tw](https://buddydex.chatbot.tw)
-
-> **Looking for a leaderboard instead?** Check out [buddyboard.xyz](https://buddyboard.xyz) — a competitive leaderboard and shareable trading cards for Claude Code `/buddy` companions. BuddyDex focuses on browsing and content depth (descriptions, try-on, 5 languages); Buddy Board focuses on social submission and ranking. The two projects are complementary.
 
 ## Features
 

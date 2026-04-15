@@ -1,9 +1,11 @@
 # BuddyDex Phase 0 + Phase 1 產品需求文件（PRD）
 
-> 版本：2.4
-> 日期：2026-04-10
-> 狀態：已審查（round 1 + round 2 + round 3 + round 4）+ 競品分析（buddyboard.xyz）+ Phase 0 Batch A/B 上線驗證通過
+> 版本：2.5（封存版）
+> 日期：2026-04-15
+> 狀態：**已封存** — Claude Code `/buddy` 功能於 2026-04-09 被移除。Phase 0 + Phase 1 已完成，Phase 2 取消。
 > 依據：`docs/research/encyclopedia-benchmarks.md` + `docs/research/buddyboard-analysis.md` + `docs/devils-advocate-review.md` + `docs/devils-advocate-review-round2.md` + `docs/devils-advocate-review-round3.md` + `docs/devils-advocate-review-round4.md`
+>
+> **封存說明**：Anthropic 於 2026-04-09 將 Claude Code 的 `/buddy` 功能靜默移除。BuddyDex 作為該功能的同人圖鑑，主題已不存在。站點保留作為歷史紀錄和技術 portfolio。不再進行功能開發。
 
 ---
 
@@ -602,18 +604,15 @@ Phase 1 完成 = Feature 1（分享）+ Feature 2（隨機探索）已上線。F
 
 ---
 
-## Phase 2 Backlog（待 GA4 數據驗證後決定）
+## ~~Phase 2 Backlog~~ — 取消（2026-04-15）
 
-| 功能                        | 條件                                              |
-| --------------------------- | ------------------------------------------------- |
-| 搜尋與篩選                  | 物種數量增加，或 GA4 顯示使用者在 grid 上大量滾動 |
-| 卡片全息光效                | 分享功能上線後，需要更強的視覺吸引力              |
-| Per-species 動態 OG image   | Phase 1 分享數據顯示流量可觀                      |
-| Mulberry32 algorithm 文件頁 | 將 BuddyDex 定位為 canonical reference            |
-| 收藏追蹤 + 抽卡模擬器       | Phase 1 數據顯示使用者有回訪意願                  |
+> `/buddy` 功能已於 2026-04-09 被 Anthropic 移除。Phase 2 所有項目失去主題基礎，全數取消。
+> 以下保留為歷史紀錄，不再執行。
 
-### 實作參考
-
-- **全息光效**：buddyboard 的 `DESIGN.md` 有具體 CSS 實作（`::before` scanline overlay + `::after` rainbow gradient sweep + `box-shadow` pulse glow）。Phase 2 實作時可作為起點，但需重寫成 BuddyDex 的 design token 系統
-- **Per-species OG image**：若走動態路線需 `@vercel/og`（Satori），會打破純靜態承諾；替代方案為預先生成 18 張 PNG 存 repo
-- **Mulberry32 文件**：需讀 Claude Code 原始碼確認 PRNG 實作、seed 來源、species/rarity/stats roll 邏輯。產出為一頁文件（非互動工具），放 `docs/reference/buddy-algorithm.md`
+| 功能                        | 原定條件                                          | 狀態 |
+| --------------------------- | ------------------------------------------------- | ---- |
+| 搜尋與篩選                  | 物種數量增加，或 GA4 顯示使用者在 grid 上大量滾動 | 取消 |
+| 卡片全息光效                | 分享功能上線後，需要更強的視覺吸引力              | 取消 |
+| Per-species 動態 OG image   | Phase 1 分享數據顯示流量可觀                      | 取消 |
+| Mulberry32 algorithm 文件頁 | 將 BuddyDex 定位為 canonical reference            | 取消 |
+| 收藏追蹤 + 抽卡模擬器       | Phase 1 數據顯示使用者有回訪意願                  | 取消 |

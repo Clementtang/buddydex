@@ -6,6 +6,8 @@ export const TRANSLATIONS = {
       note: "ASCII art is original fan-art and may differ from actual in-game sprites",
       randomButton: "Surprise me",
       randomButtonAria: "Show a random buddy",
+      archiveBanner:
+        "Claude Code's /buddy feature was retired on April 9, 2026. This site is preserved as a historical archive.",
     },
     teaching: {
       title: "Customize your buddy",
@@ -203,6 +205,8 @@ export const TRANSLATIONS = {
       note: "ASCII 圖像為原創同人創作，可能與遊戲內實際角色有所不同",
       randomButton: "隨機看一隻",
       randomButtonAria: "隨機顯示一隻 buddy",
+      archiveBanner:
+        "Claude Code 的 /buddy 功能已於 2026 年 4 月 9 日停止提供。本站保留作為歷史紀錄。",
     },
     teaching: {
       title: "自訂你的 Buddy",
@@ -384,6 +388,8 @@ export const TRANSLATIONS = {
       note: "ASCIIアートはオリジナルのファンアートであり、ゲーム内の実際のスプライトとは異なる場合があります",
       randomButton: "ランダム",
       randomButtonAria: "ランダムな buddy を表示",
+      archiveBanner:
+        "Claude Code の /buddy 機能は 2026 年 4 月 9 日に廃止されました。本サイトは歴史的アーカイブとして保存されています。",
     },
     teaching: {
       title: "Buddy をカスタマイズする",
@@ -573,6 +579,8 @@ export const TRANSLATIONS = {
       note: "ASCII 아트는 오리지널 팬아트이며, 실제 게임 내 스프라이트와 다를 수 있습니다",
       randomButton: "랜덤 버디",
       randomButtonAria: "랜덤 buddy 보기",
+      archiveBanner:
+        "Claude Code의 /buddy 기능은 2026년 4월 9일에 종료되었습니다. 이 사이트는 역사적 아카이브로 보존됩니다.",
     },
     teaching: {
       title: "Buddy 커스터마이즈하기",
@@ -768,6 +776,8 @@ export const TRANSLATIONS = {
       note: "ASCII 图像为原创同人作品，可能与游戏内实际角色有所不同",
       randomButton: "随机看一只",
       randomButtonAria: "随机显示一只 buddy",
+      archiveBanner:
+        "Claude Code 的 /buddy 功能已于 2026 年 4 月 9 日停止提供。本站保留作为历史记录。",
     },
     teaching: {
       title: "自定义你的 Buddy",

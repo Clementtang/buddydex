@@ -189,13 +189,7 @@ Phase 1 is in progress. Feature 1 (share functionality) shipped and verified. Se
 
 - Phase 0 (technical debt + infrastructure): **complete**, closed 2026-04-11
 - Phase 1 (share + random + teaching guide + stats): **complete**, shipped 2026-04-12
-  - Feature 1 (share/hash routing + copy link + Web Share + og:image meta): **shipped**
-  - Feature 2 (random explore button): **shipped**
-  - Feature 3 (buddy customization guide): **shipped**
-  - Feature 4 (five-stat display): **shipped**
-  - Attached fixes (hatch click-skip, mobile lang dropdown, H1/meta/README): **shipped**
-  - og-image.png PNG asset: **pending** (meta tags deployed, PNG not yet created — social platforms gracefully degrade to text-only preview)
-  - GA4 7-day observation period: 2026-04-12 → 2026-04-19
-- Phase 2 (search + collection + holographic foil): **backlog**, gated on Phase 1 GA4 data (use `mcp__thufir__ga4_report` after 2026-04-19)
+- **Project archived 2026-04-15**: Claude Code's `/buddy` feature was retired by Anthropic on 2026-04-09. The subject matter no longer exists. Site preserved as historical record and technical portfolio.
+- Phase 2: **cancelled** — all backlog items lost their foundation with the feature removal
 
-Phase 1 "Done" minimum condition (Feature 1 + Feature 2) was met; Features 3 + 4 + all attached fixes also landed as bonus scope.
+No further feature development is planned. The codebase, tests, CI, and deployment remain intact for portfolio reference.

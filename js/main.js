@@ -20,6 +20,10 @@ function updateStaticText() {
   document.getElementById("site-note").textContent = t("site.note");
   document.getElementById("section-title").textContent = t("sectionTitle");
 
+  // Archive banner — /buddy retired 2026-04-09
+  const archiveBanner = document.getElementById("archive-banner");
+  if (archiveBanner) archiveBanner.textContent = t("site.archiveBanner");
+
   // Feature 2 random button — label + aria-label both localized.
   const randomBtn = document.getElementById("random-btn");
   if (randomBtn) {

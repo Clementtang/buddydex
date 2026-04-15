@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-04-15
+
+### Changed
+
+- Project archived: Claude Code's `/buddy` feature was retired on 2026-04-09. BuddyDex is preserved as a historical record of the buddy species, mechanics, and community knowledge
+- Added archive banner to site header (localized in all 5 languages)
+- README updated with archive notice; removed buddyboard.xyz cross-link (both projects affected by the feature removal)
+- Phase 2 backlog cancelled in PRD; no further feature development planned
+
 ## [1.5.0] - 2026-04-12
 
 ### Added
@@ -149,7 +158,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Responsive layout for mobile devices
 - Deployed to Vercel
 
-[unreleased]: https://github.com/Clementtang/buddydex/compare/v1.5.0...HEAD
+[unreleased]: https://github.com/Clementtang/buddydex/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/Clementtang/buddydex/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/Clementtang/buddydex/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Clementtang/buddydex/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/Clementtang/buddydex/compare/v1.2.0...v1.3.0
