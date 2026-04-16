@@ -3,7 +3,7 @@ export const TRANSLATIONS = {
     site: {
       title: "BuddyDex",
       subtitle: "A field guide to Claude Buddies",
-      note: "ASCII art is original fan-art and may differ from actual in-game sprites",
+      note: "ASCII art from the original Claude Code buddy system, preserved for historical reference",
       randomButton: "Surprise me",
       randomButtonAria: "Show a random buddy",
       archiveBanner:
@@ -202,7 +202,7 @@ export const TRANSLATIONS = {
     site: {
       title: "BuddyDex",
       subtitle: "Claude Buddy 圖鑑",
-      note: "ASCII 圖像為原創同人創作，可能與遊戲內實際角色有所不同",
+      note: "ASCII 圖像取自 Claude Code 原版 buddy 系統，保留作為歷史紀錄",
       randomButton: "隨機看一隻",
       randomButtonAria: "隨機顯示一隻 buddy",
       archiveBanner:
@@ -385,7 +385,7 @@ export const TRANSLATIONS = {
     site: {
       title: "BuddyDex",
       subtitle: "Claude Buddy 図鑑",
-      note: "ASCIIアートはオリジナルのファンアートであり、ゲーム内の実際のスプライトとは異なる場合があります",
+      note: "ASCIIアートはClaude Codeの元のバディシステムから取得し、歴史的記録として保存しています",
       randomButton: "ランダム",
       randomButtonAria: "ランダムな buddy を表示",
       archiveBanner:
@@ -576,7 +576,7 @@ export const TRANSLATIONS = {
     site: {
       title: "BuddyDex",
       subtitle: "Claude Buddy 도감",
-      note: "ASCII 아트는 오리지널 팬아트이며, 실제 게임 내 스프라이트와 다를 수 있습니다",
+      note: "ASCII 아트는 Claude Code 원본 buddy 시스템에서 가져온 것으로, 역사적 기록으로 보존됩니다",
       randomButton: "랜덤 버디",
       randomButtonAria: "랜덤 buddy 보기",
       archiveBanner:
@@ -773,7 +773,7 @@ export const TRANSLATIONS = {
     site: {
       title: "BuddyDex",
       subtitle: "Claude Buddy 图鉴",
-      note: "ASCII 图像为原创同人作品，可能与游戏内实际角色有所不同",
+      note: "ASCII 图像取自 Claude Code 原版 buddy 系统，保留作为历史记录",
       randomButton: "随机看一只",
       randomButtonAria: "随机显示一只 buddy",
       archiveBanner:

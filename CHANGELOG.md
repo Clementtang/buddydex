@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Project archived: Claude Code's `/buddy` feature was retired on 2026-04-09. BuddyDex is preserved as a historical record of the buddy species, mechanics, and community knowledge
+- ASCII art restored from the original Claude Code buddy system (`sprites.ts`) for historical accuracy. The fan-art replacements (introduced in v1.0 to avoid IP risk while `/buddy` was active) are no longer needed now that the feature has been retired
+- Site subtitle note updated from "original fan-art" to "preserved for historical reference"
 - Added archive banner to site header (localized in all 5 languages)
 - README updated with archive notice; removed buddyboard.xyz cross-link (both projects affected by the feature removal)
 - Phase 2 backlog cancelled in PRD; no further feature development planned

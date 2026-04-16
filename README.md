@@ -36,7 +36,7 @@ A fan-made encyclopedia of Claude Buddy species — the virtual ASCII pet compan
 ## Data Sources
 
 - **Species names, rarity tiers, and accessory system**: Based on publicly available community documentation of the Claude Code buddy feature
-- **ASCII art**: Original fan-art designs created for this project. These do **not** represent the actual in-game appearance — the real buddy sprites may look different in Claude Code
+- **ASCII art**: Restored from the original Claude Code buddy system (`sprites.ts`) for historical accuracy. The art was initially replaced with fan-art designs while `/buddy` was an active product feature (to avoid IP concerns). After Anthropic retired the feature on 2026-04-09, the original art was reinstated to preserve a faithful record of what the buddies actually looked like
 
 ## Disclaimer
 
