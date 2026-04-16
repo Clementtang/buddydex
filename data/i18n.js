@@ -181,6 +181,8 @@ export const TRANSLATIONS = {
       off: "Off",
       copyLink: "Copy link",
       copied: "Copied!",
+      copyImage: "Copy image",
+      imageCopied: "Image copied!",
       share: "Share",
     },
     hatch: {
@@ -365,6 +367,8 @@ export const TRANSLATIONS = {
       off: "關",
       copyLink: "複製連結",
       copied: "已複製！",
+      copyImage: "複製圖片",
+      imageCopied: "圖片已複製！",
       share: "分享",
     },
     hatch: {
@@ -555,6 +559,8 @@ export const TRANSLATIONS = {
       off: "オフ",
       copyLink: "リンクをコピー",
       copied: "コピーしました！",
+      copyImage: "画像をコピー",
+      imageCopied: "画像をコピーしました！",
       share: "共有",
     },
     hatch: {
@@ -752,6 +758,8 @@ export const TRANSLATIONS = {
       off: "꺼짐",
       copyLink: "링크 복사",
       copied: "복사됨!",
+      copyImage: "이미지 복사",
+      imageCopied: "이미지가 복사되었습니다!",
       share: "공유",
     },
     hatch: {
@@ -936,6 +944,8 @@ export const TRANSLATIONS = {
       off: "关",
       copyLink: "复制链接",
       copied: "已复制！",
+      copyImage: "复制图片",
+      imageCopied: "图片已复制！",
       share: "分享",
     },
     hatch: {
