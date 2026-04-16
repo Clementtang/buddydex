@@ -17,6 +17,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - README updated with archive notice; removed buddyboard.xyz cross-link (both projects affected by the feature removal)
 - Phase 2 backlog cancelled in PRD; no further feature development planned
 
+### Lifetime Metrics (2026-04-02 → 2026-04-16, 14 days)
+
+GA4:
+
+- 52 page views, 27 unique users, 40 sessions, 173 events
+- Peak day: 2026-04-04 (12 PV / 12 users / 13 sessions) — coincides with the maintainer's Facebook announcement
+- Country mix: Taiwan 63%, US 22%, Japan 7%, Vietnam 7%, others
+- Source mix: Facebook referrals 45% (m./lm./l./.com combined), direct 53%, organic 2% (DuckDuckGo)
+- Device mix: 17 mobile users / 10 desktop users (sessions: 19 mobile / 21 desktop)
+
+Google Search Console:
+
+- 0 impressions, 0 clicks across the entire 14-day window
+- Site never surfaced in search results; "buddydex" namespace dominated by buddydex.app, buddydex.fun, buddydex.vercel.app (the maintainer's old Vercel preview URL leaked via the Facebook post), and an unrelated buddyex.com / shiken.ai
+- The maintainer's own site (buddydex.chatbot.tw) did not appear on the first page of Google search for "buddydex" by 2026-04-16
+
+Conclusion: traffic was incidental, not the project's value. The technical patterns (CSP, i18n, a11y, testing, review methodology) and the 6-round devil's advocate review chain are the durable artefacts.
+
 ## [1.5.0] - 2026-04-12
 
 ### Added
