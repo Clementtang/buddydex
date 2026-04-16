@@ -93,6 +93,76 @@ function announce(message) {
   el.textContent = message;
 }
 
+/**
+ * Render the current buddy as a PNG blob suitable for copying to the
+ * clipboard. Draws species name, ASCII art (rarity-coloured), and
+ * a small site URL footer onto a 1280×800 backing canvas (640×400
+ * logical, 2× for retina) over the dark theme background.
+ *
+ * Returns a Promise<Blob> on success, or null when blob conversion
+ * fails. Caller is responsible for clipboard write + error handling.
+ */
+async function renderBuddyImage({
+  species,
+  rarityId,
+  rarityColor,
+  asciiText,
+  speciesName,
+}) {
+  // Wait for JetBrains Mono to load so the canvas matches the on-page
+  // rendering. Fonts API is available everywhere ClipboardItem is.
+  if (document.fonts?.ready) {
+    await document.fonts.ready;
+  }
+
+  const W = 640;
+  const H = 400;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const canvas = document.createElement("canvas");
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  // Background — site bg-primary
+  ctx.fillStyle = "#0d0d0d";
+  ctx.fillRect(0, 0, W, H);
+
+  // Species name in accent (Claude orange)
+  ctx.fillStyle = "#da7756";
+  ctx.font = "700 28px 'JetBrains Mono', monospace";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "top";
+  ctx.fillText(speciesName, W / 2, 40);
+
+  // Rarity label below species name
+  ctx.fillStyle = rarityColor;
+  ctx.font = "500 14px 'JetBrains Mono', monospace";
+  ctx.fillText(rarityId.toUpperCase(), W / 2, 80);
+
+  // ASCII art — rarity-coloured, monospace
+  const asciiLines = asciiText.split("\n");
+  ctx.fillStyle = rarityColor;
+  ctx.font = "32px 'JetBrains Mono', monospace";
+  ctx.textBaseline = "middle";
+  const lineHeight = 38;
+  const blockHeight = asciiLines.length * lineHeight;
+  const blockTop = (H - blockHeight) / 2 + 20; // shift down to balance footer
+  for (let i = 0; i < asciiLines.length; i++) {
+    ctx.fillText(asciiLines[i], W / 2, blockTop + i * lineHeight);
+  }
+
+  // Footer — site URL in muted secondary
+  ctx.fillStyle = "#8a7d72";
+  ctx.font = "13px 'JetBrains Mono', monospace";
+  ctx.textBaseline = "bottom";
+  ctx.fillText("buddydex.chatbot.tw", W / 2, H - 32);
+
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob), "image/png");
+  });
+}
+
 function renderAscii(species, frameIndex, eyeSymbol, hatAscii) {
   const frame = species.frames[frameIndex];
   return frame
@@ -217,6 +287,52 @@ export function openDetail(speciesId, detailRefs) {
       }, 1500);
     });
     actionGroup.appendChild(copyBtn);
+
+    // Copy Image — renders the current buddy state as a PNG and writes
+    // it to the clipboard via ClipboardItem. Hidden on browsers that
+    // don't support clipboard image writes (Firefox <127, older Safari).
+    if (
+      typeof window.ClipboardItem === "function" &&
+      typeof navigator.clipboard?.write === "function"
+    ) {
+      const copyImgBtn = document.createElement("button");
+      copyImgBtn.type = "button";
+      copyImgBtn.className = "detail-action-btn copy-image-btn";
+      const copyImgLabel = t("detail.copyImage");
+      copyImgBtn.textContent = copyImgLabel;
+      copyImgBtn.setAttribute("aria-label", copyImgLabel);
+      copyImgBtn.addEventListener("click", async () => {
+        try {
+          const blob = await renderBuddyImage({
+            species,
+            rarityId: currentRarity.id,
+            rarityColor: currentRarity.color,
+            asciiText: renderAscii(
+              species,
+              0,
+              currentEye.symbol,
+              currentHat.ascii,
+            ),
+            speciesName: t(`species.${species.id}.name`),
+          });
+          if (!blob) return;
+          await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob }),
+          ]);
+        } catch {
+          // Clipboard permission denied, blob conversion failed, or
+          // the user dismissed a permission prompt — silent no-op.
+          return;
+        }
+        const copiedLabel = t("detail.imageCopied");
+        copyImgBtn.textContent = copiedLabel;
+        announce(copiedLabel);
+        setTimeout(() => {
+          copyImgBtn.textContent = copyImgLabel;
+        }, 1500);
+      });
+      actionGroup.appendChild(copyImgBtn);
+    }
 
     // Web Share API — only shown when supported (typical on mobile).
     // On unsupported browsers we silently omit the button so users
