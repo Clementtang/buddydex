@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.5.2] - 2026-04-20
+
+### Added
+
+- **Copy Image button** in the detail modal share actions, inspired by buddydex.app's two-button share pattern. Renders the current buddy state (species, rarity, eyes, hat) as a 640×400 PNG (1280×800 backing for retina) and writes it to the clipboard via the modern ClipboardItem API
+- The rendered image embeds species name in Claude orange, rarity label in rarity color, ASCII art in rarity color, and a `buddydex.chatbot.tw` watermark on a dark background — a self-contained shareable card that captures the user's exact configured look
+- Feature-detected: button only appears when both `window.ClipboardItem` is constructable and `navigator.clipboard.write` is callable. Hides on Firefox <127 and older Safari rather than failing
+- Localized "Copy image" / "Image copied!" labels added in all 5 languages (en / zh-TW / zh-CN / ja / ko)
+
 ## [1.5.1] - 2026-04-15
 
 ### Changed
@@ -178,7 +187,8 @@ Conclusion: traffic was incidental, not the project's value. The technical patte
 - Responsive layout for mobile devices
 - Deployed to Vercel
 
-[unreleased]: https://github.com/Clementtang/buddydex/compare/v1.5.1...HEAD
+[unreleased]: https://github.com/Clementtang/buddydex/compare/v1.5.2...HEAD
+[1.5.2]: https://github.com/Clementtang/buddydex/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/Clementtang/buddydex/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/Clementtang/buddydex/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Clementtang/buddydex/compare/v1.3.0...v1.4.0
